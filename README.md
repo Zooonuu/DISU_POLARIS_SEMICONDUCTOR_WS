@@ -2,11 +2,11 @@
 
 ## 주제
 
-**SOI FinFET의 출력 노드 방향 비대칭 Composite Spacer 설계 및 DTCO 기반 공정-소자-회로 공동 최적화**
+**SOI FinFET의 비대칭 Low-k Composite Spacer 설계 및 TCAD 기반 공정-소자-회로 공동 최적화**
 
 영문 가제:
 
-**DTCO of an Output-Side Asymmetric Low-k Composite Spacer in SOI FinFETs**
+**TCAD-Based DTCO of a Drain-Side Asymmetric Low-k Composite Spacer in SOI FinFETs**
 
 ---
 
