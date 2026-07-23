@@ -67,7 +67,11 @@
 ## 5. 검증
 
 - [ ] Pareto 후보 직접 재실행
-- [ ] 후보 주변 ±0.3~0.5 nm 검증
+- [ ] `generate_robust_cases.py`로 후보 주변 ±0.3~0.5 nm 공정 편차 case 생성
+- [ ] 공정 편차 case TCAD 재실행
+- [ ] `robust_optimum.py` 입력용 `robust_results.csv` 작성
+- [ ] Ion 유지율, EDP 열화율, Cgd 개선 유지율 계산
+- [ ] Cgd 개선 대비 Ion 손실 보상율 계산
 - [ ] Hold-out case 검증
 - [ ] Mesh sensitivity 확인
 - [ ] VDD 및 온도 조건 확인

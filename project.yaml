@@ -32,6 +32,20 @@ constraints:
   - l_sp_d_nm >= l_sp_s_nm
   - w_low_k_nm <= l_sp_d_nm
 
+robust_validation:
+  absolute_variation_nm: [0.3, 0.5]
+  include_one_at_a_time: true
+  include_combined_corners: true
+  guardrails:
+    min_ion_retention_pct: 95.0
+    max_edp_degradation_pct: 10.0
+    min_cgd_reduction_retention_pct: 80.0
+    min_compensation_pct: 70.0
+  metrics:
+    ion: ion_A
+    cgd: cgd_F
+    edp: edp_Js
+
 reproducibility:
   seed: 20260723
   keep_failed_runs: true

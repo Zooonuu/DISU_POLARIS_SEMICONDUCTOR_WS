@@ -2,11 +2,11 @@
 
 ## 주제
 
-**SOI 기반 출력 노드 지향 비대칭 Composite Spacer 3D FinFET의 공정–소자–회로 공동 최적화**
+**SOI FinFET의 출력 노드 방향 비대칭 Composite Spacer 설계 및 DTCO 기반 공정-소자-회로 공동 최적화**
 
 영문 가제:
 
-**Process–Device–Circuit Co-Optimization of an Output-Oriented Asymmetric Composite Spacer in a 3D SOI FinFET**
+**DTCO of an Output-Side Asymmetric Low-k Composite Spacer in SOI FinFETs**
 
 ---
 
@@ -90,6 +90,7 @@ L_sp_D >= L_sp_S
 - Pareto front
 - Hold-out 검증
 - 최적점 주변 재검증
+- 공정 편차 방어율 및 spacer trade-off 보상율
 - 공정 편차에 강한 robust optimum
 
 ---
@@ -206,6 +207,24 @@ python 03_doe/generate_cases.py \
   --method lhs \
   --seed 20260723
 ```
+
+Pareto 후보 주변 robust 검증 case 생성 예시:
+
+```bash
+python 03_doe/generate_robust_cases.py \
+  --candidates 05_results/summary/pareto.csv \
+  --max-candidates 3
+```
+
+TCAD 실행 후 `base_case_id`, `variation_kind`, `ion_A`, `cgd_F`, `edp_Js`를 포함하는 결과 CSV를 만들고, baseline reference와 비교해 robust optimum을 계산한다.
+
+```bash
+python 05_results/robust_optimum.py \
+  --input 05_results/summary/robust_results.csv \
+  --baseline-input 05_results/summary/baseline_reference.csv
+```
+
+Robust 판단은 후보 주변 `L_sp_S`, `L_sp_D`, `W_low_k` 편차에서 `Ion` 유지율, `EDP` 열화율, `Cgd` 개선 유지율, `Cgd` 개선 대비 `Ion` 손실 보상율을 함께 본다.
 
 ---
 

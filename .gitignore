@@ -40,10 +40,8 @@ scratch/
 !04_circuit/output/.gitkeep
 05_results/raw/*
 !05_results/raw/.gitkeep
-05_results/summary/*
-!05_results/summary/.gitkeep
 
-# Final figures are intentionally tracked.
+# Summary CSVs and final figures are intentionally tracked.
 
 # Office temporary files
 ~$*
