@@ -55,14 +55,14 @@
 ## 4. 회로
 
 - [ ] NMOS/PMOS 데이터를 회로에 연결
-- [ ] CMOS inverter VTC
-- [ ] Noise margin
-- [ ] tpHL, tpLH
-- [ ] Static power
-- [ ] Switching energy
-- [ ] PDP 또는 EDP
-- [ ] Ring oscillator frequency
-- [ ] Ring oscillator power
+- [ ] Unit inverter VTC로 NMOS/PMOS 연결 방향 및 switching 정상 동작 확인
+- [ ] 3-stage ring oscillator 구성
+- [ ] 3-stage ring oscillator transient oscillation 수렴
+- [ ] Oscillation frequency 추출
+- [ ] Stage delay 추출
+- [ ] Average power 추출
+- [ ] Energy per cycle 추출
+- [ ] RO3 기준 PDP 또는 EDP 계산
 
 ## 5. 검증
 
@@ -84,7 +84,7 @@
 - [ ] 공정 흐름도
 - [ ] Id–Vg 및 핵심 지표 그래프
 - [ ] 전계/Cgd Heatmap
-- [ ] Inverter Power–Delay 결과
+- [ ] 3-stage ring oscillator waveform 및 Power–Delay 결과
 - [ ] Pareto front
 - [ ] 보고서
 - [ ] 포스터

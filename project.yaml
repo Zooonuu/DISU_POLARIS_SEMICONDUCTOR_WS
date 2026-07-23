@@ -23,6 +23,17 @@ materials:
   baseline_spacer: Si3N4
   low_k: SiO2
 
+circuit_evaluation:
+  primary: three_stage_ring_oscillator
+  stage_count: 3
+  unit_cell_check: cmos_inverter
+  primary_metrics:
+    - oscillation_frequency_Hz
+    - stage_delay_s
+    - average_power_W
+    - energy_per_cycle_J
+    - edp_Js
+
 design_space:
   l_sp_s_nm: [3.0, 7.0]
   l_sp_d_nm: [5.0, 11.0]

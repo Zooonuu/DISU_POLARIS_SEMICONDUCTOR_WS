@@ -1,4 +1,9 @@
-# CMOS inverter template
+# CMOS unit inverter sanity-check template
+#
+# This is not the primary final circuit metric.
+# Use it to verify NMOS/PMOS connection, VTC, and switching before building
+# the 3-stage ring oscillator.
+#
 # PMOS source = VDD
 # NMOS source = GND
 # PMOS/NMOS gate = IN

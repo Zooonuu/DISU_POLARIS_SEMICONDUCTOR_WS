@@ -1,2 +1,13 @@
-# 3-stage or 5-stage ring oscillator template
-# Extract frequency, power and energy per cycle.
+# 3-stage ring oscillator template
+#
+# Primary circuit-level validation target for OASIS-FinFET.
+# Build three CMOS inverter stages from the extracted NMOS/PMOS devices.
+# Each proposed device must orient its drain-side composite spacer toward
+# the switching stage output node.
+#
+# Extract:
+# - oscillation frequency
+# - stage delay = period / (2 * 3)
+# - average power
+# - energy per cycle
+# - PDP or EDP
