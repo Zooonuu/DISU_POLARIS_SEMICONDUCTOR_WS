@@ -1,0 +1,19 @@
+runs: 30
+seed: 20260723
+
+targets:
+  delay_s: null
+  leakage_A: null
+  ro_frequency_Hz: null
+
+disturbance:
+  deposition_rate_sigma_fraction: 0.03
+  etch_rate_sigma_fraction: 0.03
+  spacer_cd_sigma_nm: 0.30
+
+controller:
+  type: ewma
+  lambda: 0.30
+  gain: 0.50
+  recipe_min_nm: 3.0
+  recipe_max_nm: 11.0

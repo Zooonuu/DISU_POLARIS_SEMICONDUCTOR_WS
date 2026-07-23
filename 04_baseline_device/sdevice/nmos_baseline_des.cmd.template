@@ -1,0 +1,10 @@
+# SENTARUS DEVICE NMOS TEMPLATE — NOT RUNNABLE AS-IS
+# Input: baseline 3D structure
+# Electrodes: source, drain, gate, body
+#
+# TODO: verify material regions and contact names
+# TODO: define physics models and temperature
+# TODO: solve equilibrium
+# TODO: ramp drain to low Vd, sweep gate
+# TODO: ramp drain to VDD, sweep gate
+# TODO: save Id-Vg, Id-Vd, field, potential, current density

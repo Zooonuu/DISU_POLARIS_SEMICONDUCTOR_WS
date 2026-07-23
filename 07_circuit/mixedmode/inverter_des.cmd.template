@@ -1,0 +1,11 @@
+# MIXEDMODE INVERTER TEMPLATE — NOT RUNNABLE AS-IS
+# PMOS source -> VDD
+# NMOS source -> GND
+# PMOS/NMOS gate -> IN
+# PMOS/NMOS drain -> OUT
+# Drain-side composite spacer must face OUT in both devices.
+#
+# TODO: DC VTC
+# TODO: transient pulse
+# TODO: load capacitance
+# TODO: tpHL, tpLH, dynamic energy, static power

@@ -1,0 +1,3 @@
+* SPICE FALLBACK TEMPLATE — NOT RUNNABLE AS-IS
+* Insert verified compact models extracted from TCAD.
+* VDD, input slew and load must match the comparison plan.

@@ -1,0 +1,31 @@
+project:
+  name: OASIS-FinFET
+  coordinate_system:
+    x: source_to_drain
+    y: fin_width
+    z: fin_height
+  status: planning
+
+simulator:
+  primary: sentaurus
+  sentaurus_version: null
+  silvaco_version: null
+  mixedmode_available: null
+
+fixed_parameters:
+  gate_length_nm: null
+  fin_height_nm: null
+  fin_width_nm: null
+  eot_nm: null
+  temperature_K: 300
+  vdd_V: null
+
+materials:
+  baseline_spacer: Si3N4
+  low_k_candidate: SiO2
+  air_gap_extension: false
+
+reproducibility:
+  default_seed: 20260723
+  record_failed_runs: true
+  save_full_design_space: true

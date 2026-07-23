@@ -1,0 +1,28 @@
+status: provisional
+variables:
+  l_sp_s_nm:
+    min: 3.0
+    max: 7.0
+  l_sp_d_nm:
+    min: 5.0
+    max: 11.0
+  w_low_k_nm:
+    min: 0.0
+    max: 4.0
+
+constraints:
+  - "l_sp_d_nm >= l_sp_s_nm"
+  - "w_low_k_nm <= l_sp_d_nm"
+
+objectives:
+  minimize:
+    - ioff_A
+    - cgd_F
+    - edp_Js
+  constraints:
+    ion_ratio_to_baseline_min: 0.90
+
+sampling:
+  default_method: lhs
+  default_samples: 24
+  default_seed: 20260723
