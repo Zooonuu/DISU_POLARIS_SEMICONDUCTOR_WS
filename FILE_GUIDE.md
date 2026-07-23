@@ -751,6 +751,40 @@ Figure 파일명에 내용이 드러나도록 이름을 붙인다.
 fig01_structure_comparison.png
 fig02_idvg_nmos.png
 fig03_pareto_edp_ioff.png
+cgd_heatmap.png
+pareto_front.png
+robust_defense_compensation.png
+```
+
+---
+
+## `05_results/plot_figures.py`
+
+### 역할
+결과 CSV를 읽어서 heatmap, trade-off graph, Pareto front, robust 방어/보상 그래프를 생성한다.
+
+### 기본 입력
+- `05_results/summary/all_metrics.csv`
+- `05_results/summary/pareto.csv`
+- `05_results/summary/robust_optimum.csv`
+
+### 생성 위치
+
+```text
+05_results/figures/
+```
+
+### 실행 예시
+
+```bash
+python 05_results/plot_figures.py
+```
+
+특정 metric만 heatmap으로 그리려면:
+
+```bash
+python 05_results/plot_figures.py \
+  --heatmap-metrics cgd_F edp_Js ion_A
 ```
 
 ---

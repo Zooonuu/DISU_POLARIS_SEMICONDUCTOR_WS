@@ -226,6 +226,12 @@ python 05_results/robust_optimum.py \
 
 Robust 판단은 후보 주변 `L_sp_S`, `L_sp_D`, `W_low_k` 편차에서 `Ion` 유지율, `EDP` 열화율, `Cgd` 개선 유지율, `Cgd` 개선 대비 `Ion` 손실 보상율을 함께 본다.
 
+결과 CSV가 준비되면 figure를 생성한다. 기본 입력은 `05_results/summary/all_metrics.csv`, `pareto.csv`, `robust_optimum.csv`이며, 생성 파일은 `05_results/figures`에 저장된다.
+
+```bash
+python 05_results/plot_figures.py
+```
+
 ---
 
 ## 완료 기준
