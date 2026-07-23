@@ -1,0 +1,37 @@
+project:
+  name: OASIS-FinFET
+  device: SOI_single_fin_FinFET
+
+coordinates:
+  x: source_to_drain
+  y: fin_width
+  z: fin_height
+
+fixed:
+  gate_length_nm: null
+  fin_height_nm: null
+  fin_width_nm: null
+  eot_nm: null
+  vdd_V: null
+  temperature_K: 300
+
+materials:
+  fin: Silicon
+  box: SiO2
+  gate_dielectric: HfO2
+  gate_metal: TiN
+  baseline_spacer: Si3N4
+  low_k: SiO2
+
+design_space:
+  l_sp_s_nm: [3.0, 7.0]
+  l_sp_d_nm: [5.0, 11.0]
+  w_low_k_nm: [0.0, 4.0]
+
+constraints:
+  - l_sp_d_nm >= l_sp_s_nm
+  - w_low_k_nm <= l_sp_d_nm
+
+reproducibility:
+  seed: 20260723
+  keep_failed_runs: true

@@ -1,4 +1,0 @@
-# MIXEDMODE RING OSCILLATOR TEMPLATE — NOT RUNNABLE AS-IS
-# Use 3 or 5 stages.
-# Record frequency, active power, standby leakage, energy/transition.
-# Use selected metrics as virtual process sentinel outputs.

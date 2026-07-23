@@ -1,0 +1,14 @@
+# Baseline SOI single-fin FinFET SProcess template
+# x = Source -> Drain
+# y = Fin width
+# z = Fin height
+#
+# TODO:
+# 1. Si substrate
+# 2. BOX
+# 3. Si Fin
+# 4. HfO2 gate dielectric
+# 5. TiN gate
+# 6. symmetric Si3N4 spacers
+# 7. source/drain
+# 8. contacts and mesh

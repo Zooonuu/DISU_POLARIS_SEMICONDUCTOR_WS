@@ -1,0 +1,6 @@
+# CMOS inverter template
+# PMOS source = VDD
+# NMOS source = GND
+# PMOS/NMOS gate = IN
+# PMOS/NMOS drain = OUT
+# Drain-side composite spacer must face OUT.

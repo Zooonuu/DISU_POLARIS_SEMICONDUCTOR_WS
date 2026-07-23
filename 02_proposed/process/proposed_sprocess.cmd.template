@@ -1,0 +1,13 @@
+# Proposed SOI FinFET SProcess template
+#
+# Parameters:
+# L_SP_S_NM
+# L_SP_D_NM
+# W_LOW_K_NM
+#
+# TODO:
+# 1. reuse verified baseline up to gate
+# 2. short source-side Si3N4 spacer
+# 3. long drain-side spacer
+# 4. SiO2 low-k region inside drain-side spacer
+# 5. preserve baseline fin, gate, EOT and doping
