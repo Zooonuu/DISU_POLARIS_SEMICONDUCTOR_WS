@@ -25,6 +25,14 @@
 
 ---
 
+## 소자 구조 참고 그림
+
+![Device structure sketch](05_results/figures/device_structure_sketch.jpg)
+
+위 손그림은 제안 SOI FinFET의 source-side spacer, TiN/HfO2 gate stack, drain-side composite spacer, `L_sp_S`, `L_sp_D`, `W_low_k` 정의를 정리한 소자 구조 참고 그림이다.
+
+---
+
 ## 좌표축
 
 프로젝트 전체에서 좌표축을 아래처럼 고정한다.
