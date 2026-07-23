@@ -27,9 +27,7 @@
 
 ## 소자 구조 참고 그림
 
-![Device structure sketch](05_results/figures/device_structure_sketch.jpg)
-
-위 손그림은 제안 SOI FinFET의 source-side spacer, TiN/HfO2 gate stack, drain-side composite spacer, `L_sp_S`, `L_sp_D`, `W_low_k` 정의를 정리한 소자 구조 참고 그림이다.
+위 손그림은 제안 SOI FinFET의 source-side spacer, TiN/HfO2 gate stack, drain-side composite spacer, `L_sp_S`, `L_sp_D`, `W_low_k` 정의를 정리한 소자 구조 참고 그림이다. (picture.png)
 
 ---
 
@@ -128,6 +126,34 @@ project.yaml           공통 파라미터
 → robust optimum
 → 최종 그림과 제출물
 ```
+
+---
+
+## 작업 환경 분리
+
+이 프로젝트는 개인 노트북과 학교 TCAD PC를 Git 저장소로 동기화해서 진행한다.
+
+```text
+개인 노트북 / VS Code:
+deck template 작성, Python 후처리 코드 작성, README/TODO 정리, 결과 해석
+
+학교 TCAD PC:
+Sentaurus/Silvaco 실행, 원본 example 검증, TCAD raw output 생성
+```
+
+기본 왕복 흐름:
+
+```text
+1. 노트북에서 deck/template/code 수정
+2. Git push
+3. 학교 PC에서 Git pull
+4. 학교 PC에서 TCAD 실행
+5. raw output은 학교 PC에 보존
+6. 요약 CSV, 핵심 figure, 필요한 log excerpt만 Git에 반영
+7. 노트북에서 Git pull 후 분석/문서화
+```
+
+TCAD 대용량 파일인 `.tdr`, `.plt`, `.log`, `.msh`, `.str` 등은 Git에 올리지 않는다. 실패 case도 삭제하지 않되, 대용량 raw output은 학교 PC의 작업 디렉토리와 `05_results/raw/` 로컬 사본에 보관하고, Git에는 요약 결과만 남긴다.
 
 ---
 

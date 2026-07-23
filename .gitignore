@@ -27,27 +27,23 @@ swb_work/
 work/
 scratch/
 
-# Generated data and figures
-03_baseline_process/outputs/*
-!03_baseline_process/outputs/**/.gitkeep
-04_baseline_device/outputs/*
-!04_baseline_device/outputs/**/.gitkeep
-05_proposed_process/outputs/*
-!05_proposed_process/outputs/**/.gitkeep
-06_proposed_device/outputs/*
-!06_proposed_device/outputs/**/.gitkeep
-07_circuit/outputs/*
-!07_circuit/outputs/.gitkeep
-08_doe_optimization/data/raw/*
-!08_doe_optimization/data/raw/.gitkeep
-08_doe_optimization/data/processed/*
-!08_doe_optimization/data/processed/.gitkeep
-08_doe_optimization/results/*
-!08_doe_optimization/results/.gitkeep
-09_virtual_r2r/results/*
-!09_virtual_r2r/results/.gitkeep
-10_validation/results/*
-!10_validation/results/.gitkeep
+# Generated TCAD/circuit outputs for the current project layout
+01_baseline/output/*
+!01_baseline/output/.gitkeep
+02_proposed/output/*
+!02_proposed/output/.gitkeep
+03_doe/cases/*
+!03_doe/cases/.gitkeep
+03_doe/output/*
+!03_doe/output/.gitkeep
+04_circuit/output/*
+!04_circuit/output/.gitkeep
+05_results/raw/*
+!05_results/raw/.gitkeep
+05_results/summary/*
+!05_results/summary/.gitkeep
+
+# Final figures are intentionally tracked.
 
 # Office temporary files
 ~$*

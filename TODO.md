@@ -2,6 +2,9 @@
 
 ## 0. 환경 및 원본
 
+- [ ] Git 원격 저장소를 개인 노트북과 학교 TCAD PC 양쪽에서 clone/pull/push 가능하게 설정
+- [ ] 학교 TCAD PC에서 `python check_project.py` 실행
+- [ ] 학교 TCAD PC에서 Sentaurus/Silvaco 실행 환경 로드 방법 기록
 - [ ] Sentaurus Process 사용 가능 확인
 - [ ] Sentaurus Device 사용 가능 확인
 - [ ] Sentaurus Visual/Inspect 사용 가능 확인
