@@ -2,7 +2,7 @@
 #
 # This is not the primary final circuit metric.
 # Use it to verify NMOS/PMOS connection, VTC, and switching before building
-# the 3-stage ring oscillator.
+# the FO4 inverter benchmark.
 #
 # PMOS source = VDD
 # NMOS source = GND

@@ -30,12 +30,12 @@
 03_doe/template/
 03_doe/template/master_case.cmd.template
 04_circuit/
+04_circuit/fo4/
+04_circuit/fo4/fo4_inverter_benchmark.cmd.template
 04_circuit/inverter/
 04_circuit/inverter/inverter.cmd.template
 04_circuit/output/
 04_circuit/output/.gitkeep
-04_circuit/ring_oscillator/
-04_circuit/ring_oscillator/ring_oscillator.cmd.template
 05_results/
 05_results/figures/
 05_results/figures/.gitkeep

@@ -29,8 +29,9 @@ COLUMN_ALIASES = {
     "ss_mV_dec": ("ss_mV_dec", "SS", "SS_mV_dec", "ss"),
     "dibl_mV_V": ("dibl_mV_V", "DIBL", "DIBL_mV_V", "dibl"),
     "cgd_F": ("cgd_F", "Cgd", "Cgd_F", "cgd"),
-    "delay_s": ("delay_s", "Delay", "delay"),
-    "power_W": ("power_W", "Power", "power"),
+    "delay_s": ("delay_s", "Delay", "delay", "fo4_delay_s", "FO4_delay"),
+    "power_W": ("power_W", "Power", "power", "average_power_W", "avg_power_W"),
+    "energy_J": ("energy_J", "Energy", "energy", "energy_per_transition_J"),
     "edp_Js": ("edp_Js", "EDP", "edp"),
 }
 
@@ -45,6 +46,7 @@ LABELS = {
     "cgd_F": "Cgd (F)",
     "delay_s": "Delay (s)",
     "power_W": "Power (W)",
+    "energy_J": "Energy (J)",
     "edp_Js": "EDP (J*s)",
     "ion_retention_min_pct": "Worst Ion retention (%)",
     "cgd_reduction_retention_min_pct": "Worst Cgd improvement retained (%)",

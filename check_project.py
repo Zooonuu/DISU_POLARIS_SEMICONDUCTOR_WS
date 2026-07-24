@@ -20,6 +20,7 @@ required = [
     "03_doe/generate_local_refinement_cases.py",
     "03_doe/generate_robust_cases.py",
     "04_circuit",
+    "04_circuit/fo4/fo4_inverter_benchmark.cmd.template",
     "05_results",
     "05_results/pareto.py",
     "05_results/robust_optimum.py",

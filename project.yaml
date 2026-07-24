@@ -26,14 +26,16 @@ materials:
   low_k: SiO2
 
 circuit_evaluation:
-  primary: three_stage_ring_oscillator
-  stage_count: 3
+  primary: fo4_inverter_benchmark
+  chain: driver_dut_4x_load
   unit_cell_check: cmos_inverter
   primary_metrics:
-    - oscillation_frequency_Hz
-    - stage_delay_s
+    - fo4_delay_s
+    - tpHL_s
+    - tpLH_s
+    - output_slew_s
     - average_power_W
-    - energy_per_cycle_J
+    - energy_per_transition_J
     - edp_Js
 
 design_space:
@@ -86,18 +88,17 @@ active_doe:
       guardrails:
         require_converged_idvg: true
     circuit_dtco:
-      purpose: final DTCO candidate selection using 3-stage ring oscillator metrics
+      purpose: final DTCO candidate selection using FO4 inverter benchmark metrics
       objectives:
-        maximize:
-          - oscillation_frequency_Hz
+        maximize: []
         minimize:
-          - stage_delay_s
+          - fo4_delay_s
           - average_power_W
-          - energy_per_cycle_J
+          - energy_per_transition_J
           - edp_Js
       guardrails:
         require_inverter_switching: true
-        require_ring_oscillation: true
+        require_fo4_transient: true
   output: 03_doe/cases/active_suggested_cases.csv
 
 local_refinement:
@@ -123,9 +124,9 @@ robust_validation:
     ion: ion_A
     cgd: cgd_F
     edp: edp_Js
-    stage_delay: stage_delay_s
+    delay: fo4_delay_s
     average_power: average_power_W
-    energy: energy_per_cycle_J
+    energy: energy_per_transition_J
 
 reproducibility:
   seed: 20260723

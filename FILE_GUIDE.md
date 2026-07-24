@@ -233,7 +233,7 @@ Baseline reference, center, feasible corner case를 생성한다.
 - 기존 sample과 너무 가까운 후보 제거
 - fabrication grid로 snapping된 후보 추천
 - `--mode device_screening`은 Ion/Ioff/DIBL/Cgd 기준으로 회로 검증 전 후보를 줄인다.
-- `--mode circuit_dtco`는 ring oscillator의 delay/power/energy/EDP 기준으로 최종 DTCO 후보를 추천한다.
+- `--mode circuit_dtco`는 FO4 inverter benchmark의 delay/power/energy/EDP 기준으로 최종 DTCO 후보를 추천한다.
 
 주의:
 
@@ -294,21 +294,23 @@ Unit CMOS inverter 검증용 template이다.
 - NMOS/PMOS 연결 방향 확인
 - VTC와 switching 정상 동작 확인
 
-### `04_circuit/ring_oscillator/ring_oscillator.cmd.template`
+### `04_circuit/fo4/fo4_inverter_benchmark.cmd.template`
 
-3-stage ring oscillator 검증용 template이다.
+FO4 inverter benchmark 검증용 template이다.
 
 목표:
 
-- oscillation frequency
-- stage delay
+- tpHL/tpLH
+- FO4 delay
+- output slew
 - average power
-- energy per cycle
+- energy per transition
 - PDP 또는 EDP
 
 주의:
 
-- Proposed device의 drain-side composite spacer가 각 stage의 switching output node를 향하도록 배치한다.
+- DUT inverter가 4x load inverter input을 구동하도록 구성한다.
+- Proposed device의 drain-side composite spacer가 switching output node를 향하도록 배치한다.
 
 ---
 
@@ -333,14 +335,13 @@ Circuit-level DTCO 예시:
 ```bash
 python3 05_results/pareto.py \
   --input 05_results/summary/all_results.csv \
-  --maximize oscillation_frequency_Hz \
-  --minimize stage_delay_s average_power_W energy_per_cycle_J edp_Js \
+  --minimize fo4_delay_s average_power_W energy_per_transition_J edp_Js \
   --output 05_results/summary/circuit_dtco_pareto.csv
 ```
 
 특징:
 
-- `Ion`, `oscillation_frequency_Hz`처럼 클수록 좋은 지표와 `Cgd`, `stage_delay_s`, `EDP`처럼 작을수록 좋은 지표를 함께 처리한다.
+- `Ion`처럼 클수록 좋은 지표와 `Cgd`, `fo4_delay_s`, `EDP`처럼 작을수록 좋은 지표를 함께 처리한다.
 - 소자 지표 Pareto는 screening용이고, 최종 DTCO Pareto는 회로 지표 기준으로 계산한다.
 - 기존 `--objectives` 인자는 backward-compatible minimization 용도로만 남긴다.
 
@@ -363,7 +364,7 @@ python3 05_results/pareto.py \
 - EDP 열화율
 - Cgd 개선 유지율
 - Cgd 개선 대비 Ion 손실 보상율
-- Stage delay, average power, energy per cycle 기준 회로 DTCO 열화율
+- FO4 delay, average power, energy per transition 기준 회로 DTCO 열화율
 - guardrail 통과 여부
 - robust score
 
@@ -454,7 +455,7 @@ l_sp_s_nm, l_sp_d_nm, w_low_k_nm,
 grid_snapped, grid_step_nm,
 ion_A, ioff_A, vth_V, ss_mV_dec, dibl_mV_V,
 cgd_F, cgs_F, cgg_F,
-ro_freq_Hz, stage_delay_s, avg_power_W, energy_J, edp_Js,
+fo4_delay_s, tpHL_s, tpLH_s, output_slew_s, average_power_W, energy_per_transition_J, edp_Js,
 status, note
 ```
 
@@ -471,7 +472,7 @@ status, note
 
 ## 9. 연구윤리 및 참고문헌 사용 원칙
 
-직접 중복 선행연구는 `references/REFERENCE_LINKS_SUMMARY.md`의 R01-R07을 우선 확인한다. 특히 R01은 asymmetric dual-spacer FinFET, device-circuit codesign, variability, inverter/RO3 평가가 본 프로젝트와 직접 겹치므로 반드시 인용한다.
+직접 중복 선행연구는 `references/REFERENCE_LINKS_SUMMARY.md`의 R01-R07을 우선 확인한다. 특히 R01은 asymmetric dual-spacer FinFET, device-circuit codesign, variability, inverter 평가가 본 프로젝트와 직접 겹치므로 반드시 인용한다.
 
 안전한 기여 표현:
 

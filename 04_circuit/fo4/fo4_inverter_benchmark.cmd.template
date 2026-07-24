@@ -1,0 +1,18 @@
+# FO4 inverter benchmark template
+#
+# Primary circuit-level validation target for OASIS-FinFET.
+# Build a driver inverter, the DUT inverter, and a 4x load inverter.
+# Measure delay at the DUT output while the DUT drives the 4x load input.
+# Each proposed device must orient its drain-side composite spacer toward
+# the switching output node of its inverter.
+#
+# Suggested topology:
+# IN -> INV_driver -> INV_DUT -> INV_load_4x
+#
+# Extract:
+# - tpHL and tpLH at the DUT output
+# - FO4 delay = (tpHL + tpLH) / 2
+# - output slew
+# - average power
+# - energy per transition
+# - PDP or EDP

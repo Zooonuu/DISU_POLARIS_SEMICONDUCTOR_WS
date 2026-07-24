@@ -117,14 +117,17 @@ def main() -> None:
     parser.add_argument("--ion-col", default=metric_cfg.get("ion", "ion_A"))
     parser.add_argument("--cgd-col", default=metric_cfg.get("cgd", "cgd_F"))
     parser.add_argument("--edp-col", default=metric_cfg.get("edp", "edp_Js"))
-    parser.add_argument("--stage-delay-col", default=metric_cfg.get("stage_delay", "stage_delay_s"))
+    parser.add_argument(
+        "--delay-col",
+        default=metric_cfg.get("delay", "fo4_delay_s"),
+    )
     parser.add_argument("--average-power-col", default=metric_cfg.get("average_power", "average_power_W"))
-    parser.add_argument("--energy-col", default=metric_cfg.get("energy", "energy_per_cycle_J"))
+    parser.add_argument("--energy-col", default=metric_cfg.get("energy", "energy_per_transition_J"))
     args = parser.parse_args()
 
     df = pd.read_csv(args.input)
     optional_circuit_cols = [
-        args.stage_delay_col,
+        args.delay_col,
         args.average_power_col,
         args.energy_col,
     ]

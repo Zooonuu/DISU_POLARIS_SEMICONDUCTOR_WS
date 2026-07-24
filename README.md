@@ -19,9 +19,9 @@
 - Source-side spacer: 짧은 `Si3N4`
 - Drain-side spacer: 더 긴 composite spacer
 - Drain-side spacer 내부: `SiO2` low-k 구간
-- NMOS와 PMOS의 Drain이 3-stage ring oscillator 각 stage의 switching output node를 향하도록 배치
+- NMOS와 PMOS의 Drain이 FO4 inverter benchmark의 switching output node를 향하도록 배치
 
-목표는 Drain 쪽의 `Cgd`, 전계 집중, DIBL, 누설전류를 낮추면서 Source 쪽의 구동전류 손실을 최소화하고, 최종적으로 3-stage ring oscillator의 stage delay, power, energy 및 EDP를 개선하는 것이다.
+목표는 Drain 쪽의 `Cgd`, 전계 집중, DIBL, 누설전류를 낮추면서 Source 쪽의 구동전류 손실을 최소화하고, 최종적으로 FO4 inverter benchmark의 delay, power, energy 및 EDP를 개선하는 것이다.
 
 이 프로젝트의 추가 기여는 **TCAD 실행 횟수가 제한된 상황에서 설계공간을 더 빠르고 신뢰성 있게 탐색하기 위한 알고리즘 흐름**이다. 초기 DOE 48개만으로 최종 신뢰성을 주장하지 않고, anchor case, surrogate-assisted active DOE, fabrication-aware grid snapping, local refinement, robust validation을 순차적으로 적용한다.
 
@@ -49,7 +49,7 @@
 4. Device-level screening으로 회로 검증 후보 축소
 5. Surrogate model 기반 active DOE 후보 추천
 6. 후보를 fabrication-aware grid로 snapping
-7. Grid-snapped 후보의 circuit-level RO3 검증
+7. Grid-snapped 후보의 circuit-level FO4 검증
 8. Circuit-level DTCO Pareto front 계산
 9. 최종 후보 주변 ±0.3/±0.5 nm robust validation
 10. nominal optimum이 아니라 robust DTCO optimum 선정
@@ -57,7 +57,7 @@
 
 핵심 주장은 다음과 같다.
 
-> 48개 DOE는 최종 증명 데이터가 아니라 설계공간을 탐색하기 위한 초기 sample이다. 소자 지표는 비싼 회로 시뮬레이션 전에 후보를 줄이는 screening 지표로 사용하고, 최종 DTCO Pareto와 robust optimum 선정은 3-stage ring oscillator의 stage delay, power, energy, EDP 같은 회로 지표를 기준으로 수행한다.
+> 48개 DOE는 최종 증명 데이터가 아니라 설계공간을 탐색하기 위한 초기 sample이다. 소자 지표는 비싼 회로 시뮬레이션 전에 후보를 줄이는 screening 지표로 사용하고, 최종 DTCO Pareto와 robust optimum 선정은 FO4 inverter benchmark의 delay, power, energy, EDP 같은 회로 지표를 기준으로 수행한다.
 
 ### 공정 grid 설명
 
@@ -75,12 +75,12 @@ robust validation: 3.0 nm 주변 ±0.3/±0.5 nm
 
 ## 연구윤리 및 선행연구 경계
 
-이 프로젝트는 asymmetric spacer FinFET, dual-k/low-k spacer, device-circuit codesign, ring oscillator 기반 delay 평가가 완전히 새로운 주제라고 주장하지 않는다. 특히 Pal et al.의 asymmetric dual-spacer trigate FinFET device-circuit codesign 및 variability 연구는 본 프로젝트와 직접적으로 겹치는 핵심 선행연구이므로 반드시 인용한다.
+이 프로젝트는 asymmetric spacer FinFET, dual-k/low-k spacer, device-circuit codesign, inverter 기반 delay 평가가 완전히 새로운 주제라고 주장하지 않는다. 특히 Pal et al.의 asymmetric dual-spacer trigate FinFET device-circuit codesign 및 variability 연구는 본 프로젝트와 직접적으로 겹치는 핵심 선행연구이므로 반드시 인용한다.
 
 직접 중복 선행연구:
 
 - R01: Pal et al., "Asymmetric Dual-Spacer Trigate FinFET Device-Circuit Codesign and Its Variability Analysis," IEEE TED, 2015.
-- R03/R05: dual-k spacer, parasitic capacitance, inverter/ring oscillator delay 연결 근거
+- R03/R05: dual-k spacer, parasitic capacitance, inverter delay 연결 근거
 - R06/R08: electric field, underlap, spacer trade-off 물리 근거
 - R11/R12: low-k 또는 hybrid spacer 공정/기생 capacitance 저감 근거
 - R16: Latin Hypercube Sampling 기반 DOE 근거
@@ -158,10 +158,11 @@ W_low_k: 0.0 ~ 4.0 nm
 ### 회로
 
 - Unit inverter VTC 및 switching 정상 동작 확인
-- 3-stage ring oscillator oscillation frequency
-- Stage delay
+- FO4 propagation delay
+- tpHL, tpLH
+- Output slew
 - Average power
-- Energy per cycle
+- Energy per transition
 - PDP 또는 EDP
 
 ### 최적화 및 신뢰성
@@ -188,7 +189,7 @@ Hold-out 검증은 현재 프로젝트 범위에서 제외한다.
 01_baseline/           대칭 spacer SOI FinFET
 02_proposed/           비대칭 composite spacer SOI FinFET
 03_doe/                DOE, anchor case, active DOE, local refinement, robust case 생성
-04_circuit/            unit inverter와 3-stage ring oscillator
+04_circuit/            unit inverter와 FO4 inverter benchmark
 05_results/            원본 결과, 요약 CSV, Pareto/robust 분석, 최종 그림
 06_submission/         보고서, 포스터, 발표자료
 README.md              연구 전체 설명
@@ -212,7 +213,7 @@ project.yaml           공통 파라미터 및 알고리즘 설정
 → device-level screening
 → surrogate-assisted active DOE 후보 추천
 → grid-snapped local refinement
-→ PMOS 및 3-stage ring oscillator 검증
+→ PMOS 및 FO4 inverter benchmark 검증
 → circuit-level DTCO Pareto front 계산
 → robust DTCO optimum
 → 최종 그림과 제출물
@@ -258,8 +259,7 @@ Circuit-level DTCO Pareto 계산 예시:
 ```bash
 python3 05_results/pareto.py \
   --input 05_results/summary/all_results.csv \
-  --maximize oscillation_frequency_Hz \
-  --minimize stage_delay_s average_power_W energy_per_cycle_J edp_Js \
+  --minimize fo4_delay_s average_power_W energy_per_transition_J edp_Js \
   --output 05_results/summary/circuit_dtco_pareto.csv
 ```
 
@@ -294,7 +294,7 @@ python3 03_doe/generate_robust_cases.py \
   --max-candidates 3
 ```
 
-TCAD/회로 실행 후 `base_case_id`, `variation_kind`, `ion_A`, `cgd_F`, `stage_delay_s`, `average_power_W`, `energy_per_cycle_J`, `edp_Js`를 포함하는 결과 CSV를 만들고, baseline reference와 비교해 robust DTCO optimum을 계산한다.
+TCAD/회로 실행 후 `base_case_id`, `variation_kind`, `ion_A`, `cgd_F`, `fo4_delay_s`, `average_power_W`, `energy_per_transition_J`, `edp_Js`를 포함하는 결과 CSV를 만들고, baseline reference와 비교해 robust DTCO optimum을 계산한다.
 
 ---
 
@@ -354,6 +354,6 @@ active_suggested_cases.csv
 local_refinement_cases.csv
 robust_cases.csv
 case_LSS05_LSD09_WLK03.csv
-ro3_LSS05_LSD09_WLK03_waveform.csv
-ro3_LSS05_LSD09_WLK03_summary.csv
+fo4_LSS05_LSD09_WLK03_waveform.csv
+fo4_LSS05_LSD09_WLK03_summary.csv
 ```

@@ -69,8 +69,8 @@
 
 - [ ] Device screening으로 살아남은 후보의 PMOS 및 회로 검증 우선순위 선정
 - [ ] Unit inverter VTC로 switching 정상 후보만 유지
-- [ ] 3-stage ring oscillator 기준 `stage_delay_s`, `average_power_W`, `energy_per_cycle_J`, `edp_Js` 추출
-- [ ] Circuit DTCO 목적함수 확정: minimize stage delay/power/energy/EDP
+- [ ] FO4 inverter benchmark 기준 `fo4_delay_s`, `average_power_W`, `energy_per_transition_J`, `edp_Js` 추출
+- [ ] Circuit DTCO 목적함수 확정: minimize FO4 delay/power/energy/EDP
 - [ ] `pareto.py`로 circuit-level DTCO Pareto 계산
 - [ ] Circuit DTCO Pareto 후보 3개 선정
 - [ ] `generate_local_refinement_cases.py`로 circuit Pareto 후보 주변 grid-snapped case 생성
@@ -94,13 +94,14 @@
 
 - [ ] NMOS/PMOS 데이터를 회로에 연결
 - [ ] Unit inverter VTC로 NMOS/PMOS 연결 방향 및 switching 정상 동작 확인
-- [ ] 3-stage ring oscillator 구성
-- [ ] 3-stage ring oscillator transient oscillation 수렴
-- [ ] Oscillation frequency 추출
-- [ ] Stage delay 추출
+- [ ] FO4 inverter benchmark 구성
+- [ ] FO4 transient switching 수렴
+- [ ] tpHL/tpLH 추출
+- [ ] FO4 delay 추출
+- [ ] Output slew 추출
 - [ ] Average power 추출
-- [ ] Energy per cycle 추출
-- [ ] RO3 기준 PDP 또는 EDP 계산
+- [ ] Energy per transition 추출
+- [ ] FO4 기준 PDP 또는 EDP 계산
 
 ## 8. 제출
 
@@ -111,7 +112,7 @@
 - [ ] 전계/Cgd Heatmap
 - [ ] Active DOE 알고리즘 흐름도
 - [ ] Grid snapping 및 local refinement 설명 그림
-- [ ] 3-stage ring oscillator waveform 및 Power-Delay 결과
+- [ ] FO4 waveform 및 Power-Delay 결과
 - [ ] Device screening Pareto front
 - [ ] Circuit-level DTCO Pareto front
 - [ ] Robust optimum summary
@@ -122,7 +123,7 @@
 ## 9. 연구윤리 및 표절 방지
 
 - [ ] R01 Pal et al. 2015를 asymmetric dual-spacer/device-circuit codesign 직접 선행연구로 본문에 인용
-- [ ] R03 또는 R05를 spacer capacitance와 inverter/ring oscillator delay 연결 근거로 인용
+- [ ] R03 또는 R05를 spacer capacitance와 inverter delay 연결 근거로 인용
 - [ ] R06 또는 R08을 electric field, underlap, spacer trade-off 물리 근거로 인용
 - [ ] R11 또는 R12를 low-k/hybrid spacer 공정 및 parasitic capacitance reduction 근거로 인용
 - [ ] R16을 LHS/DOE 방법론 근거로 인용
