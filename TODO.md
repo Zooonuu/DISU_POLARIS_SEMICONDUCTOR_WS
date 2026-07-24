@@ -118,3 +118,16 @@
 - [ ] 보고서
 - [ ] 포스터
 - [ ] 발표자료
+
+## 9. 연구윤리 및 표절 방지
+
+- [ ] R01 Pal et al. 2015를 asymmetric dual-spacer/device-circuit codesign 직접 선행연구로 본문에 인용
+- [ ] R03 또는 R05를 spacer capacitance와 inverter/ring oscillator delay 연결 근거로 인용
+- [ ] R06 또는 R08을 electric field, underlap, spacer trade-off 물리 근거로 인용
+- [ ] R11 또는 R12를 low-k/hybrid spacer 공정 및 parasitic capacitance reduction 근거로 인용
+- [ ] R16을 LHS/DOE 방법론 근거로 인용
+- [ ] "최초 제안", "최초 연결", "실제 제작 검증", "실측 결과" 표현이 남아 있지 않은지 확인
+- [ ] `suggest_active_cases.py` 구현 범위를 lightweight surrogate-assisted active DOE로 설명하고, 실제 구현하지 않은 ANN/MOBO/NSGA-II 사용 주장을 제거
+- [ ] 논문 figure를 그대로 복제하지 않고 직접 작성한 schematic과 출처 인용만 사용
+- [ ] 유료 논문 PDF와 proprietary Sentaurus/Silvaco deck이 Git에 포함되지 않았는지 확인
+- [ ] TCAD 결과, mock 결과, 실제 측정 결과를 표/그림 caption에서 명확히 구분

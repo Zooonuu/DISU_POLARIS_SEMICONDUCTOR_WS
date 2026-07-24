@@ -31,6 +31,8 @@
 
 - TCAD 결과를 실제 제작 결과처럼 표현하지 않는다.
 - Initial DOE 48개를 최종 통계 검증으로 과장하지 않는다.
+- Asymmetric/dual-k/composite spacer 구조 자체의 최초성을 주장하지 않는다.
+- Pal et al. 2015 등 직접 중복 선행연구를 본문에서 반드시 인용한다.
 
 ### `TODO.md`
 
@@ -72,6 +74,7 @@
 
 - 결과를 확인한 뒤 좋은 결과가 나오도록 범위나 목적함수를 몰래 바꾸지 않는다.
 - 범위 변경 시 commit과 이유를 남긴다.
+- `active_doe`에 실제 구현하지 않은 ANN, MOBO, NSGA-II 같은 알고리즘명을 넣지 않는다.
 
 ### `requirements.txt`
 
@@ -119,6 +122,11 @@ Git에 올리지 않을 파일을 지정한다.
 
 요약 CSV와 최종 figure는 Git에 올릴 수 있다.
 
+주의:
+
+- 유료 논문 PDF, 논문 원본 그림, proprietary TCAD deck은 Git에 올리지 않는다.
+- 학교 설치본에서 가져온 Sentaurus/Silvaco example은 공개 가능 여부를 확인하기 전까지 raw deck 그대로 commit하지 않는다.
+
 ---
 
 ## 2. TCAD 구조 폴더
@@ -131,6 +139,8 @@ Git에 올리지 않을 파일을 지정한다.
 
 - 원본 파일은 직접 수정하지 않는다.
 - baseline 작업은 `01_baseline/`로 복사한 뒤 시작한다.
+- 학교 라이선스에 포함된 proprietary example은 공개 Git 저장소에 올리지 않는다.
+- 공개 가능한 경우에도 출처와 tool/version 정보를 기록한다.
 
 ### `01_baseline/`
 
@@ -228,6 +238,8 @@ Baseline reference, center, feasible corner case를 생성한다.
 주의:
 
 - 이 스크립트는 거대한 AI 모델이 아니라 제한된 TCAD 예산을 효율적으로 쓰기 위한 lightweight surrogate-assisted sampler다.
+- 보고서에는 ANN, MOBO, NSGA-II를 실제 구현한 것처럼 쓰지 않는다.
+- Bayesian optimization이나 genetic algorithm은 실제 구현 전까지 배경 또는 향후 확장으로만 언급한다.
 
 ### `03_doe/generate_local_refinement_cases.py`
 
@@ -389,6 +401,11 @@ TCAD raw output의 로컬 보관 위치다.
 - `robust_results.csv`
 - `robust_optimum.csv`
 
+주의:
+
+- Mock/test 결과, TCAD simulation 결과, 실제 측정 결과를 파일명 또는 `source_type`/`note` 컬럼으로 구분한다.
+- 제출용 표와 그림 caption에는 TCAD simulation 결과인지 실제 측정값인지 명확히 적는다.
+
 ### `05_results/figures/`
 
 보고서, 포스터, 발표자료에 들어갈 최종 그림을 둔다.
@@ -449,3 +466,43 @@ l_sp_s_nm, l_sp_d_nm, w_low_k_nm,
 ion_A, cgd_F, edp_Js,
 status, note
 ```
+
+---
+
+## 9. 연구윤리 및 참고문헌 사용 원칙
+
+직접 중복 선행연구는 `references/REFERENCE_LINKS_SUMMARY.md`의 R01-R07을 우선 확인한다. 특히 R01은 asymmetric dual-spacer FinFET, device-circuit codesign, variability, inverter/RO3 평가가 본 프로젝트와 직접 겹치므로 반드시 인용한다.
+
+안전한 기여 표현:
+
+```text
+선행연구의 asymmetric/dual-k spacer FinFET 및 device-circuit codesign 흐름을 바탕으로,
+본 프로젝트는 SOI FinFET seed deck에서 drain-side low-k composite spacer 설계공간을
+정의하고, 제한된 TCAD 실행 예산 안에서 device screening, circuit-level DTCO Pareto,
+fabrication-aware grid snapping, robust validation workflow를 구축한다.
+```
+
+피해야 할 표현:
+
+- 비대칭 dual-k/composite spacer FinFET을 최초로 제안하였다.
+- spacer engineering과 circuit delay를 최초로 연결하였다.
+- robust/variability analysis를 최초로 수행하였다.
+- SiO2 low-k spacer가 기존에 없던 신공정이다.
+- TCAD 결과를 실제 fabrication 또는 실측 결과로 검증하였다.
+- ANN/MOBO/NSGA-II 기반 최적화를 수행하였다. 단, 실제 구현 및 검증한 경우는 제외한다.
+
+그림 사용 원칙:
+
+- 논문 figure는 그대로 복제하지 않는다.
+- 직접 작성한 conceptual schematic을 사용하고, caption 또는 본문에 관련 선행연구를 인용한다.
+- `picture.png` 같은 손그림은 내부 개념 정리용이며, 제출용 그림은 새로 정리해 작성한다.
+
+인용 최소 세트:
+
+- R01: asymmetric dual-spacer + device-circuit codesign + variability 직접 선행연구
+- R03 또는 R05: spacer capacitance와 circuit delay 연결 근거
+- R06 또는 R08: electric field / underlap / spacer trade-off 물리 근거
+- R11 또는 R12: low-k/hybrid spacer 공정 및 capacitance reduction 근거
+- R15: FinFET 기본 구조 배경
+- R16: DOE/LHS 근거
+- R24 또는 R26: Sentaurus FinFET/3D TCAD 지원 및 seed example 근거
