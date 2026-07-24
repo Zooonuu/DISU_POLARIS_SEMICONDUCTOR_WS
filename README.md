@@ -296,6 +296,16 @@ python3 03_doe/generate_robust_cases.py \
 
 TCAD/회로 실행 후 `base_case_id`, `variation_kind`, `ion_A`, `cgd_F`, `fo4_delay_s`, `average_power_W`, `energy_per_transition_J`, `edp_Js`를 포함하는 결과 CSV를 만들고, baseline reference와 비교해 robust DTCO optimum을 계산한다.
 
+Yield-like pass rate 계산:
+
+```bash
+python3 05_results/yield_like.py \
+  --input 05_results/summary/robust_results.csv \
+  --output 05_results/summary/yield_like.csv
+```
+
+이 값은 실제 fab yield가 아니라, robust variation sample 중 `project.yaml`의 spec을 만족하는 비율이다. 발표에서는 "yield-like spec pass rate" 또는 "variation sample pass rate"로 설명한다.
+
 ---
 
 ## 작업 환경 분리

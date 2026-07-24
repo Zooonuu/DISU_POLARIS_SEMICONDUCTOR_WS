@@ -46,6 +46,7 @@
 05_results/robust_optimum.py
 05_results/summary/
 05_results/summary/.gitkeep
+05_results/yield_like.py
 06_submission/
 06_submission/poster/
 06_submission/poster/.gitkeep

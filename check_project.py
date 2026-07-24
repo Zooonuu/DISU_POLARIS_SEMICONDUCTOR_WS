@@ -24,6 +24,7 @@ required = [
     "05_results",
     "05_results/pareto.py",
     "05_results/robust_optimum.py",
+    "05_results/yield_like.py",
     "06_submission",
 ]
 

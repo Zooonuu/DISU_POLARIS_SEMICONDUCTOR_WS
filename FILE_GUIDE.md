@@ -368,6 +368,27 @@ python3 05_results/pareto.py \
 - guardrail 통과 여부
 - robust score
 
+### `05_results/yield_like.py`
+
+Robust variation 결과에서 yield-like spec pass rate를 계산한다.
+
+입력:
+
+- `05_results/summary/robust_results.csv`
+- 각 `base_case_id`마다 `variation_kind=nominal` 행과 variation sample 행
+
+출력:
+
+- `05_results/summary/yield_like.csv`
+
+계산 항목:
+
+- variation sample 수
+- spec 통과/실패 개수
+- spec pass rate
+- Ion retention, Cgd variation, EDP/FO4 delay/power/energy degradation별 pass rate
+- 실패한 variation label
+
 ### `05_results/plot_figures.py`
 
 최종 figure 생성을 담당한다.

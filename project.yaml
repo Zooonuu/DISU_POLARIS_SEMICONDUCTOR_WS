@@ -128,6 +128,17 @@ robust_validation:
     average_power: average_power_W
     energy: energy_per_transition_J
 
+yield_like:
+  sample_basis: robust_validation
+  output: 05_results/summary/yield_like.csv
+  specs:
+    max_edp_degradation_pct: 10.0
+    max_fo4_delay_degradation_pct: 10.0
+    max_average_power_degradation_pct: 10.0
+    max_energy_degradation_pct: 10.0
+    min_ion_retention_pct: 95.0
+    max_cgd_variation_pct: 10.0
+
 reproducibility:
   seed: 20260723
   keep_failed_runs: true
