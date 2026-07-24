@@ -1,6 +1,8 @@
 project:
   name: OASIS-FinFET
   device: SOI_single_fin_FinFET
+  method: surrogate_assisted_fabrication_aware_tcad_dtco
+  short_title: Surrogate-Assisted TCAD DTCO of an Asymmetric Low-k Spacer
 
 coordinates:
   x: source_to_drain
@@ -43,10 +45,75 @@ constraints:
   - l_sp_d_nm >= l_sp_s_nm
   - w_low_k_nm <= l_sp_d_nm
 
+doe:
+  initial_samples: 48
+  method: lhs
+  seed: 20260723
+  output: 03_doe/cases/initial_doe_cases.csv
+
+anchor_cases:
+  enabled: true
+  include_baseline_reference: true
+  baseline_spacer_nm: 5.0
+  include_center: true
+  include_feasible_corners: true
+  output: 03_doe/cases/anchor_cases.csv
+
+fabrication_grid:
+  enabled: true
+  step_nm: 0.5
+  snap_final_candidates: true
+  note: continuous DOE points are exploration-only; final candidates are grid-snapped and re-simulated
+
+active_doe:
+  enabled: true
+  strategy: surrogate_assisted_active_sampling
+  default_mode: device_screening
+  candidate_pool_size: 4096
+  suggestion_batch_size: 8
+  exploration_weight: 0.35
+  min_distance_nm: 0.25
+  modes:
+    device_screening:
+      purpose: reduce TCAD search space before expensive circuit-level simulation
+      objectives:
+        maximize:
+          - ion_A
+        minimize:
+          - ioff_A
+          - dibl_mV_V
+          - cgd_F
+      guardrails:
+        require_converged_idvg: true
+    circuit_dtco:
+      purpose: final DTCO candidate selection using 3-stage ring oscillator metrics
+      objectives:
+        maximize:
+          - oscillation_frequency_Hz
+        minimize:
+          - stage_delay_s
+          - average_power_W
+          - energy_per_cycle_J
+          - edp_Js
+      guardrails:
+        require_inverter_switching: true
+        require_ring_oscillation: true
+  output: 03_doe/cases/active_suggested_cases.csv
+
+local_refinement:
+  enabled: true
+  selection_basis: circuit_dtco
+  max_candidates: 3
+  grid_step_nm: 0.5
+  radius_steps: 1
+  output: 03_doe/cases/local_refinement_cases.csv
+
 robust_validation:
+  selection_basis: circuit_dtco
   absolute_variation_nm: [0.3, 0.5]
   include_one_at_a_time: true
   include_combined_corners: true
+  output: 03_doe/cases/robust_cases.csv
   guardrails:
     min_ion_retention_pct: 95.0
     max_edp_degradation_pct: 10.0
@@ -56,6 +123,9 @@ robust_validation:
     ion: ion_A
     cgd: cgd_F
     edp: edp_Js
+    stage_delay: stage_delay_s
+    average_power: average_power_W
+    energy: energy_per_cycle_J
 
 reproducibility:
   seed: 20260723

@@ -24,6 +24,10 @@ def feasible(row: dict[str, float], space: dict) -> bool:
     return row["l_sp_d_nm"] >= row["l_sp_s_nm"] and row["w_low_k_nm"] <= row["l_sp_d_nm"]
 
 
+def snap(value: float, step: float) -> float:
+    return round(round(value / step) * step, 6)
+
+
 def add_case(
     rows: list[dict],
     seen: set[tuple],
@@ -58,25 +62,41 @@ def add_case(
             "l_sp_s_nm": varied["l_sp_s_nm"],
             "l_sp_d_nm": varied["l_sp_d_nm"],
             "w_low_k_nm": varied["w_low_k_nm"],
+            "structure": "proposed",
             "status": "not_started",
         }
     )
 
 
 def main() -> None:
+    cfg = load_config()
+    robust_cfg = cfg.get("robust_validation", {})
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--candidates", type=Path, default=ROOT / "05_results/summary/pareto.csv")
-    parser.add_argument("--output", type=Path, default=ROOT / "03_doe/robust_cases.csv")
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=ROOT / robust_cfg.get("output", "03_doe/cases/robust_cases.csv"),
+    )
     parser.add_argument("--max-candidates", type=int, default=3)
     parser.add_argument("--deltas-nm", nargs="*", type=float)
+    parser.add_argument("--snap-nominal", action="store_true")
+    parser.add_argument("--no-snap-nominal", action="store_true")
+    parser.add_argument("--grid-step-nm", type=float)
     args = parser.parse_args()
 
-    cfg = load_config()
     space = cfg["design_space"]
-    robust_cfg = cfg.get("robust_validation", {})
+    grid_cfg = cfg.get("fabrication_grid", {})
     deltas = args.deltas_nm or robust_cfg.get("absolute_variation_nm", [0.3, 0.5])
     include_oat = bool(robust_cfg.get("include_one_at_a_time", True))
     include_corners = bool(robust_cfg.get("include_combined_corners", True))
+    snap_nominal = bool(grid_cfg.get("snap_final_candidates", True))
+    if args.snap_nominal:
+        snap_nominal = True
+    if args.no_snap_nominal:
+        snap_nominal = False
+    grid_step = args.grid_step_nm or float(grid_cfg.get("step_nm", 0.5))
 
     candidates = pd.read_csv(args.candidates)
     missing = {"case_id", *PARAM_NAMES} - set(candidates.columns)
@@ -90,6 +110,8 @@ def main() -> None:
     seen: set[tuple] = set()
     for _, candidate in candidates.iterrows():
         nominal = {name: float(candidate[name]) for name in PARAM_NAMES}
+        if snap_nominal:
+            nominal = {name: snap(value, grid_step) for name, value in nominal.items()}
         add_case(rows, seen, candidate, nominal, "nominal", 0.0, space)
 
         for delta in deltas:

@@ -65,17 +65,17 @@ def robust_score(row: pd.Series, guardrails: dict) -> float:
     max_edp = float(guardrails.get("max_edp_degradation_pct", 10.0))
     edp_degradation = row.get("edp_degradation_max_pct", np.nan)
     if pd.notna(edp_degradation) and max_edp > 0:
-        weighted.append((30.0, clipped_pct((1.0 - edp_degradation / max_edp) * 100.0)))
+        weighted.append((40.0, clipped_pct((1.0 - edp_degradation / max_edp) * 100.0)))
 
     min_cgd = float(guardrails.get("min_cgd_reduction_retention_pct", 80.0))
     cgd_retention = row.get("cgd_reduction_retention_min_pct", np.nan)
     if pd.notna(cgd_retention) and min_cgd > 0:
-        weighted.append((20.0, clipped_pct(cgd_retention / min_cgd * 100.0)))
+        weighted.append((15.0, clipped_pct(cgd_retention / min_cgd * 100.0)))
 
     min_comp = float(guardrails.get("min_compensation_pct", 70.0))
     compensation = row.get("compensation_min_pct", np.nan)
     if pd.notna(compensation) and min_comp > 0:
-        weighted.append((20.0, clipped_pct(compensation / min_comp * 100.0)))
+        weighted.append((15.0, clipped_pct(compensation / min_comp * 100.0)))
 
     if not weighted:
         return np.nan
@@ -117,9 +117,17 @@ def main() -> None:
     parser.add_argument("--ion-col", default=metric_cfg.get("ion", "ion_A"))
     parser.add_argument("--cgd-col", default=metric_cfg.get("cgd", "cgd_F"))
     parser.add_argument("--edp-col", default=metric_cfg.get("edp", "edp_Js"))
+    parser.add_argument("--stage-delay-col", default=metric_cfg.get("stage_delay", "stage_delay_s"))
+    parser.add_argument("--average-power-col", default=metric_cfg.get("average_power", "average_power_W"))
+    parser.add_argument("--energy-col", default=metric_cfg.get("energy", "energy_per_cycle_J"))
     args = parser.parse_args()
 
     df = pd.read_csv(args.input)
+    optional_circuit_cols = [
+        args.stage_delay_col,
+        args.average_power_col,
+        args.energy_col,
+    ]
     require_columns(
         df,
         [args.base_col, args.variation_col, args.ion_col, args.cgd_col, args.edp_col],
@@ -156,6 +164,13 @@ def main() -> None:
             "nominal_cgd": cgd_nom,
             "nominal_edp": edp_nom,
         }
+
+        for col in optional_circuit_cols:
+            if col in group.columns and pd.notna(nominal[col]):
+                nominal_value = float(nominal[col])
+                degradation = (variations[col].astype(float) / nominal_value - 1.0) * 100.0
+                row[f"{col}_degradation_max_pct"] = max(0.0, degradation.max())
+                row[f"nominal_{col}"] = nominal_value
 
         if baseline is not None:
             ion_base = float(baseline[args.ion_col])

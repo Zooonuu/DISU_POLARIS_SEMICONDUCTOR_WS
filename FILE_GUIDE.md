@@ -1,973 +1,451 @@
 # FILE GUIDE
 
-이 문서는 `DISU_FinFET_Simple_WS` 프로젝트에 존재하는 **모든 파일의 역할, 수정 시점, 생성 주체**를 한 곳에 정리한 문서다.
+이 문서는 `OASIS-FinFET` 프로젝트에 존재하는 주요 파일과 폴더의 역할, 수정 시점, 생성 주체를 정리한다.
 
-별도의 폴더별 설명 문서는 두지 않는다. 프로젝트 설명은 `README.md`, 진행 상황은 `TODO.md`, 모든 파일 설명은 이 `FILE_GUIDE.md`만 사용한다.
+프로젝트 연구 배경은 `README.md`, 실제 진행률은 `TODO.md`, 공통 설정은 `project.yaml`에 둔다. 새 결정과 진행 상황은 별도 계획 문서를 만들지 말고 `TODO.md`와 관련 설정 파일에 반영한다.
 
 ---
 
-# 1. 최상위 파일
+## 1. 최상위 파일
 
-## `README.md`
+### `README.md`
 
-### 역할
-프로젝트의 전체 연구 방향을 설명하는 대표 문서다.
+프로젝트의 대표 설명 문서다.
 
-### 포함 내용
+포함 내용:
+
 - 연구 주제
-- Baseline 구조와 Proposed 구조
-- 좌표축 정의
-- 주요 공정 변수
-- 소자 및 회로 평가 지표
-- 전체 프로젝트 진행 흐름
+- Baseline/Proposed 소자 구조
+- Surrogate-assisted active DOE 알고리즘
+- Fabrication-aware grid snapping
+- Local refinement와 robust validation
+- 실행 예시
 - 파일 관리 원칙
-- 완료 기준
 
-### 언제 수정하는가
-연구 주제, 구조, 평가 기준처럼 **프로젝트 전체에 영향을 주는 내용이 확정적으로 바뀔 때만** 수정한다.
+수정 시점:
 
-### 누가 수정하는가
-팀 전체 합의 후 한 명이 정리한다.
+- 연구 주제, 방법론, 평가 기준처럼 프로젝트 전체 방향이 바뀔 때
+- 제출물에서 사용할 공식 표현이 바뀔 때
 
----
+주의:
 
-## `TODO.md`
+- TCAD 결과를 실제 제작 결과처럼 표현하지 않는다.
+- Initial DOE 48개를 최종 통계 검증으로 과장하지 않는다.
 
-### 역할
-프로젝트의 실제 진행 순서를 체크박스로 관리한다.
+### `TODO.md`
 
-### 포함 내용
-- 환경 확인
-- Baseline 구조 생성
-- Proposed 구조 생성
-- DOE
+현재 해야 할 일을 체크박스로 관리한다.
+
+포함 내용:
+
+- 환경 및 원본 example 확보
+- Baseline/Proposed TCAD 구현
+- DOE 및 anchor case
+- Surrogate-assisted active DOE
+- Fabrication-aware local refinement
+- Robust validation
 - 회로 검증
-- 최적점 검증
 - 제출물 제작
 
-### 언제 수정하는가
-작업을 시작하거나 완료할 때 체크 상태를 갱신한다.
+수정 시점:
 
-### 주의
-실험 결과나 긴 설명을 이 파일에 적지 않는다.  
-`TODO.md`는 **현재 무엇을 해야 하는지**만 보여줘야 한다.
+- 실제 작업을 시작하거나 완료했을 때
+- 프로젝트 흐름이 바뀌었을 때
+
+### `project.yaml`
+
+프로젝트의 공통 설정 파일이다.
+
+주요 섹션:
+
+- `project`: 프로젝트명, 소자 종류, 방법론
+- `fixed`: gate length, fin height, fin width, EOT, VDD, 온도
+- `design_space`: `L_sp_S`, `L_sp_D`, `W_low_k` 범위
+- `doe`: initial DOE sample 수, 방법, seed, 출력 경로
+- `anchor_cases`: baseline, center, feasible corner 생성 설정
+- `fabrication_grid`: 최종 후보 snapping 단위
+- `active_doe`: device screening과 circuit DTCO 모드별 surrogate-assisted active DOE 설정
+- `local_refinement`: circuit-level DTCO Pareto 후보 주변 grid 탐색 설정
+- `robust_validation`: 공정 편차 검증 및 guardrail 설정
+
+주의:
+
+- 결과를 확인한 뒤 좋은 결과가 나오도록 범위나 목적함수를 몰래 바꾸지 않는다.
+- 범위 변경 시 commit과 이유를 남긴다.
+
+### `requirements.txt`
+
+Python 분석 환경에서 필요한 패키지 목록이다.
+
+현재 패키지:
+
+- `numpy`
+- `pandas`
+- `scipy`
+- `matplotlib`
+- `PyYAML`
+
+### `check_project.py`
+
+필수 파일과 폴더가 존재하는지 검사한다.
+
+실행:
+
+```bash
+python3 check_project.py
+```
+
+정상 출력:
+
+```text
+[OK] 프로젝트 구조가 정상입니다.
+```
+
+수정 시점:
+
+- 필수 폴더나 핵심 스크립트가 추가/삭제될 때
+
+### `.gitignore`
+
+Git에 올리지 않을 파일을 지정한다.
+
+제외 대상:
+
+- Python 가상환경과 cache
+- TCAD 대용량 raw output
+- mesh/structure/log 파일
+- 자동 생성 case CSV
+- raw result 파일
+
+요약 CSV와 최종 figure는 Git에 올릴 수 있다.
 
 ---
 
-## `FILE_GUIDE.md`
+## 2. TCAD 구조 폴더
 
-### 역할
-현재 프로젝트에 존재하는 모든 파일과 폴더의 용도를 설명한다.
+### `00_original_example/`
 
-### 언제 수정하는가
-새 파일을 추가하거나 기존 파일의 역할이 바뀌었을 때 수정한다.
+학교 TCAD PC에서 확보한 원본 3D FinFET example을 수정 없이 보존한다.
 
-### 주의
-프로젝트의 연구 배경은 `README.md`, 진행률은 `TODO.md`에 적는다.  
-이 문서는 오직 **파일 설명서**로 사용한다.
+원칙:
 
----
+- 원본 파일은 직접 수정하지 않는다.
+- baseline 작업은 `01_baseline/`로 복사한 뒤 시작한다.
 
-## `project.yaml`
+### `01_baseline/`
 
-### 역할
-프로젝트 전체에서 공통으로 사용할 설정과 설계변수를 저장한다.
+대칭 `Si3N4` spacer SOI FinFET baseline을 만든다.
 
-### 현재 포함 내용
+주요 파일:
 
-#### 프로젝트 정보
-- 프로젝트명
-- 소자 종류
+- `process/baseline_sprocess.cmd.template`
+- `device/baseline_nmos_sdevice.cmd.template`
+- `device/baseline_pmos_sdevice.cmd.template`
+- `output/.gitkeep`
 
-#### 좌표축
-- `x`: Source → Drain
-- `y`: Fin 폭
-- `z`: Fin 높이
+목표:
 
-#### 고정 파라미터
-- Gate length
-- Fin height
-- Fin width
-- EOT
-- VDD
-- Temperature
+- 3D mesh 수렴
+- NMOS/PMOS Id-Vg, Id-Vd 수렴
+- Ion, Ioff, Vth, SS, DIBL 추출
+- baseline 구조와 지표 동결
 
-#### 재료
-- Fin: Silicon
-- BOX: SiO2
-- Gate dielectric: HfO2
-- Gate metal: TiN
-- Baseline spacer: Si3N4
-- Low-k: SiO2
+### `02_proposed/`
 
-#### DOE 변수 범위
+비대칭 drain-side low-k composite spacer 구조를 만든다.
+
+주요 파일:
+
+- `process/proposed_sprocess.cmd.template`
+- `device/proposed_nmos_sdevice.cmd.template`
+- `device/proposed_pmos_sdevice.cmd.template`
+- `output/.gitkeep`
+
+핵심 변수:
+
 - `L_sp_S`
 - `L_sp_D`
 - `W_low_k`
 
-#### 제약조건
-- `L_sp_D >= L_sp_S`
-- `W_low_k <= L_sp_D`
+목표:
 
-#### 재현성 설정
-- Random seed
-- 실패 Run 보존 여부
-
-### 언제 수정하는가
-Baseline 치수와 실제 공정 가능 범위가 확정될 때 수정한다.
-
-### 주의
-결과를 확인한 뒤 좋은 결과가 나오도록 범위를 몰래 바꾸면 안 된다.  
-범위 변경 시 Git commit과 이유를 남긴다.
+- baseline과 동일 조건에서 spacer 효과만 비교
+- Cgd, DIBL, electric field, current density 변화 확인
 
 ---
 
-## `requirements.txt`
+## 3. DOE 및 알고리즘 폴더
 
-### 역할
-Python 분석 환경에서 필요한 패키지 목록을 저장한다.
+### `03_doe/generate_cases.py`
 
-### 현재 패키지
-- `numpy`: 수치 계산
-- `pandas`: CSV 및 표 데이터 처리
-- `scipy`: LHS/Sobol 등 DOE 계산
-- `matplotlib`: 그래프 작성
-- `PyYAML`: `project.yaml` 읽기
+Initial DOE case를 생성한다.
 
-### 실행 방법
+현재 기본 설정:
 
-```bash
-pip install -r requirements.txt
-```
+- sample 수: `project.yaml`의 `doe.initial_samples`, 기본 48개
+- 방법: LHS 또는 Sobol
+- 출력: `03_doe/cases/initial_doe_cases.csv`
 
-### 언제 수정하는가
-새 Python 라이브러리가 실제로 필요할 때만 추가한다.
+역할:
 
----
+- 연속 설계공간을 탐색하기 위한 초기 sample 생성
+- 최종 공정 가능성 주장이 아니라 surrogate 학습 및 Pareto 방향 탐색용 데이터 생성
 
-## `check_project.py`
+### `03_doe/generate_anchor_cases.py`
 
-### 역할
-필수 파일과 폴더가 존재하는지 검사한다.
+Baseline reference, center, feasible corner case를 생성한다.
 
-### 검사 대상
-- `README.md`
-- `TODO.md`
-- `project.yaml`
-- 번호별 주요 폴더
+출력:
 
-### 실행 방법
+- `03_doe/cases/anchor_cases.csv`
 
-```bash
-python check_project.py
-```
+역할:
 
-### 정상 출력
+- LHS/Sobol sample만으로 부족한 기준점과 극단 조건 보강
+- 48개 DOE의 해석 신뢰성 보조
 
-```text
-[OK] 간소화 프로젝트 구조가 정상입니다.
-```
+### `03_doe/suggest_active_cases.py`
 
-### 언제 수정하는가
-필수 폴더 구조가 바뀔 때 검사 목록을 수정한다.
+완료된 TCAD 결과를 바탕으로 추가 실행할 active DOE 후보를 추천한다.
 
----
+입력:
 
-## `install_here.sh`
+- `05_results/summary/all_results.csv`
 
-### 역할
-배포받은 프로젝트 골격을 실제 작업 폴더에 복사한다.
+출력:
 
-### 기본 설치 위치
+- `03_doe/cases/active_suggested_cases.csv`
 
-```text
-~/DISU_POLARIS_WS/DISU_WS
-```
+알고리즘:
 
-### 실행 예시
+- 완료된 결과로 간단한 surrogate model 학습
+- 성능 예측값과 surrogate uncertainty를 함께 고려
+- 기존 sample과 너무 가까운 후보 제거
+- fabrication grid로 snapping된 후보 추천
+- `--mode device_screening`은 Ion/Ioff/DIBL/Cgd 기준으로 회로 검증 전 후보를 줄인다.
+- `--mode circuit_dtco`는 ring oscillator의 delay/power/energy/EDP 기준으로 최종 DTCO 후보를 추천한다.
 
-```bash
-bash install_here.sh
-```
+주의:
 
-다른 경로에 설치하려면:
+- 이 스크립트는 거대한 AI 모델이 아니라 제한된 TCAD 예산을 효율적으로 쓰기 위한 lightweight surrogate-assisted sampler다.
 
-```bash
-bash install_here.sh /원하는/경로
-```
+### `03_doe/generate_local_refinement_cases.py`
 
-### 언제 사용하는가
-프로젝트 골격을 처음 설치할 때만 사용한다.
+Circuit-level DTCO Pareto 후보 주변의 fabrication-aware grid case를 생성한다.
 
-### 설치 후
-정상 설치 후에는 삭제해도 프로젝트 실행에 영향이 없다.
+입력:
 
----
+- `05_results/summary/circuit_dtco_pareto.csv`
 
-## `.gitignore`
+출력:
 
-### 역할
-Git에 올리지 않을 파일을 지정한다.
+- `03_doe/cases/local_refinement_cases.csv`
 
-### 제외되는 주요 항목
-- `.venv/`
-- Python cache
-- VS Code 개인 설정
-- TCAD 결과 파일
-- Mesh 및 구조 파일
-- Log와 임시 파일
-- 자동 생성 DOE case
-- 대용량 raw output
+역할:
 
-### 왜 필요한가
-TCAD 결과 파일은 크기가 크고 다시 생성할 수 있기 때문에 저장소를 불필요하게 무겁게 만든다.
+- `3.12 nm` 같은 연속 DOE 후보를 최종 DTCO 주장에 직접 쓰지 않도록 방지
+- `0.5 nm` 또는 설정된 grid 단위로 후보를 snap
+- circuit-level 후보 주변을 작은 grid로 다시 검증
 
-### 언제 수정하는가
-새로운 자동 생성 파일 형식이 생겼을 때 추가한다.
+### `03_doe/generate_robust_cases.py`
+
+최종 후보 주변 공정 편차 검증 case를 생성한다.
+
+입력:
+
+- `05_results/summary/circuit_dtco_pareto.csv` 또는 local refinement 결과에서 고른 후보 CSV
+
+출력:
+
+- `03_doe/cases/robust_cases.csv` 또는 지정한 경로
+
+역할:
+
+- nominal candidate 주변 `±0.3 nm`, `±0.5 nm` variation 생성
+- one-at-a-time variation과 combined corner variation 생성
+- robust optimum 계산용 입력 준비
+
+### `03_doe/template/master_case.cmd.template`
+
+DOE case를 실제 TCAD deck으로 변환할 때 사용할 master template이다.
 
 ---
 
-## `TREE.txt`
+## 4. 회로 폴더
 
-### 역할
-현재 폴더 구조를 텍스트로 보여준다.
+### `04_circuit/inverter/inverter.cmd.template`
 
-### 주의
-자동으로 프로젝트 동작에 사용되는 파일은 아니다.  
-사람이 구조를 빠르게 확인하기 위한 참고 파일이다.
+Unit CMOS inverter 검증용 template이다.
 
-### 갱신 방법
+목표:
 
-```bash
-find . -maxdepth 3 -not -path "./.git/*" | sort > TREE.txt
-```
+- NMOS/PMOS 연결 방향 확인
+- VTC와 switching 정상 동작 확인
 
----
+### `04_circuit/ring_oscillator/ring_oscillator.cmd.template`
 
-# 2. `00_original_example`
+3-stage ring oscillator 검증용 template이다.
 
-## `00_original_example/.gitkeep`
+목표:
 
-### 역할
-폴더가 비어 있어도 Git이 `00_original_example` 폴더를 추적하게 한다.
-
-### 수정 여부
-수정하지 않는다.
-
-### 삭제 가능 여부
-실제 원본 예제 파일이 폴더에 들어오면 삭제해도 된다.
-
----
-
-## 이 폴더에 나중에 들어갈 파일
-
-학교 서버 또는 Sentaurus 설치환경에서 제공하는 원본 FinFET 예제를 그대로 복사한다.
-
-예상 파일:
-- SProcess Deck
-- SDevice Deck
-- Workbench project
-- Parameter file
-- 실행 script
-- 예제 결과
-
-### 원칙
-원본 예제는 수정하지 않는다.  
-수정이 필요한 파일은 `01_baseline`으로 복사한 뒤 변경한다.
-
----
-
-# 3. `01_baseline`
-
-Baseline은 양쪽에 동일한 `Si3N4` spacer를 가진 SOI single-fin FinFET이다.
-
-## `01_baseline/process/baseline_sprocess.cmd.template`
-
-### 역할
-Baseline 3D SOI FinFET 구조를 만드는 SProcess Deck의 초안이다.
-
-### 구현할 구조
-1. Si substrate
-2. BOX
-3. Silicon Fin
-4. HfO2 gate dielectric
-5. TiN gate
-6. 대칭 Si3N4 spacer
-7. Source/Drain
-8. Contact
-9. Mesh
-
-### 파일 확장자 의미
-- `.cmd`: Sentaurus 입력 Deck에서 자주 쓰는 확장자
-- `.template`: 아직 실행 가능한 최종 Deck이 아니라는 표시
-
-### 언제 수정하는가
-원본 예제가 정상 실행된 뒤, 설치된 Sentaurus 버전 문법에 맞춰 채운다.
-
-### 최종 상태
-검증이 끝나면 다음처럼 실행용 파일을 별도로 만들 수 있다.
-
-```text
-baseline_sprocess.cmd
-```
-
-원본 template은 남겨두거나 실제 실행 Deck으로 이름을 변경한다.
-
----
-
-## `01_baseline/device/baseline_nmos_sdevice.cmd.template`
-
-### 역할
-Baseline NMOS의 전기적 특성을 계산하는 SDevice Deck 초안이다.
-
-### 입력
-Baseline SProcess에서 생성한 3D 구조 및 mesh.
-
-### 계산할 항목
-- Equilibrium
-- Low-VDS Id–Vg
-- High-VDS Id–Vg
-- Id–Vd
-- Ion
-- Ioff
-- Vth
-- SS
-- DIBL
-- Cgd, Cgs, Cgg
-
-### 언제 수정하는가
-Baseline SProcess 구조의 region과 contact 이름이 확정된 뒤 수정한다.
-
-### 주의
-Proposed NMOS와 동일한 physics model, bias 조건, metric 정의를 사용해야 한다.
-
----
-
-## `01_baseline/device/baseline_pmos_sdevice.cmd.template`
-
-### 역할
-Baseline PMOS의 전기적 특성을 계산하는 SDevice Deck 초안이다.
-
-### NMOS 파일과 다른 부분
-- Source/Drain doping type
-- Channel doping type
-- Gate work function
-- Bias 부호
-- 전류 부호 처리
-
-### 동일하게 유지할 부분
-- Mesh 기준
-- 온도
-- Metric 추출법
-- VDD 절댓값
-- Solver 기준
-
----
-
-## `01_baseline/output/.gitkeep`
-
-### 역할
-`output` 폴더가 비어 있어도 Git에 유지되게 한다.
-
-### 나중에 이 폴더에 들어갈 파일
-- `.tdr`: 구조 및 mesh 결과
-- `.plt`: 전기적 결과
-- `.log`: 실행 log
-- `.csv`: 추출 metric
-- 구조 screenshot
-
-### 수정 여부
-수정하지 않는다.
-
-### 삭제 가능 여부
-실제 결과 파일이 생성되면 삭제해도 된다.
-
----
-
-# 4. `02_proposed`
-
-Proposed 구조는 Source와 Drain의 spacer를 다르게 설계한 SOI FinFET이다.
-
-## `02_proposed/process/proposed_sprocess.cmd.template`
-
-### 역할
-비대칭 composite spacer 구조를 만드는 SProcess Deck 초안이다.
-
-### 주요 입력 변수
-- `L_SP_S_NM`: Source-side spacer 길이
-- `L_SP_D_NM`: Drain-side spacer 총길이
-- `W_LOW_K_NM`: Drain-side spacer 내부 low-k 구간 길이
-
-### 구현할 변화
-- Source-side: 짧은 Si3N4 spacer
-- Drain-side: 긴 spacer
-- Drain-side 내부: SiO2 low-k 영역
-
-### Baseline과 동일하게 유지할 항목
-- Gate length
-- Fin width
-- Fin height
-- EOT
-- Gate material
-- Channel doping
-- Source/Drain doping
-- Temperature
-
-### 언제 수정하는가
-Baseline SProcess Deck이 완전히 검증된 뒤 복사하여 spacer 부분만 변경한다.
-
----
-
-## `02_proposed/device/proposed_nmos_sdevice.cmd.template`
-
-### 역할
-Proposed NMOS를 해석하는 SDevice Deck 초안이다.
-
-### 비교 대상
-`01_baseline/device/baseline_nmos_sdevice.cmd.template`
-
-### 특별히 확인할 항목
-- Drain-side electric field
-- Cgd
-- Ioff
-- DIBL
-- Ion 감소량
-- Potential distribution
-- Current density
-
-### 원칙
-Baseline과 같은 bias와 같은 metric 추출 기준을 사용한다.
-
----
-
-## `02_proposed/device/proposed_pmos_sdevice.cmd.template`
-
-### 역할
-Proposed PMOS를 해석하는 SDevice Deck 초안이다.
-
-### 목적
-3-stage ring oscillator를 구성하려면 NMOS뿐 아니라 PMOS의 Proposed 구조도 필요하다.
-
-### 확인할 항목
-- NMOS와 같은 device metric
-- PMOS drive current
-- NMOS/PMOS drive balance
-- Unit inverter switching 및 ring oscillator stage 동작 변화
-
----
-
-## `02_proposed/output/.gitkeep`
-
-### 역할
-빈 `output` 폴더를 Git에 유지한다.
-
-### 나중에 저장될 파일
-- Proposed 3D 구조
-- NMOS/PMOS 결과
-- Field map
-- Capacitance 결과
-- Metric CSV
-- 실행 log
-
----
-
-# 5. `03_doe`
-
-DOE 폴더는 임의의 몇 점만 선택하는 Cherry-picking을 막고 전체 설계공간을 체계적으로 탐색한다.
-
-## `03_doe/generate_cases.py`
-
-### 역할
-`project.yaml`의 설계범위를 읽어서 DOE 조건을 생성한다.
-
-### 지원 방식
-- LHS: Latin Hypercube Sampling
-- Sobol sequence
-
-### 입력 인자
-- `--samples`: 생성할 case 수
-- `--method`: `lhs` 또는 `sobol`
-- `--seed`: Random seed
-
-### 실행 예시
-
-```bash
-python 03_doe/generate_cases.py \
-  --samples 24 \
-  --method lhs \
-  --seed 20260723
-```
-
-### 생성 파일
-
-```text
-03_doe/cases.csv
-```
-
-### 생성되는 열
-- `case_id`
-- `l_sp_s_nm`
-- `l_sp_d_nm`
-- `w_low_k_nm`
-- `status`
-
-### 자동 적용 제약
-- `L_sp_D >= L_sp_S`
-- `W_low_k <= L_sp_D`
-
-### 언제 수정하는가
-설계변수 개수 또는 제약조건이 바뀔 때 수정한다.
-
----
-
-## `03_doe/template/master_case.cmd.template`
-
-### 역할
-검증된 Proposed Golden Deck을 DOE case별로 복제할 때 사용하는 공통 template이다.
-
-### 치환 변수
-- `{{CASE_ID}}`
-- `{{L_SP_S_NM}}`
-- `{{L_SP_D_NM}}`
-- `{{W_LOW_K_NM}}`
-
-### 사용 흐름
-1. 검증된 Proposed Deck 내용을 넣는다.
-2. Python script가 각 변수 값을 치환한다.
-3. `03_doe/cases`에 case별 실행 Deck을 생성한다.
-
-### 주의
-Baseline 또는 Proposed Golden Deck이 검증되기 전에는 이 template을 확정하지 않는다.
-
----
-
-## `03_doe/cases/.gitkeep`
-
-### 역할
-자동 생성 case가 없을 때 폴더를 유지한다.
-
-### 나중에 들어갈 파일
-- `C001/`
-- `C002/`
-- `C003/`
-- Case별 `.cmd`
-- Case별 parameter file
-
-### 수정 여부
-수정하지 않는다.
-
----
-
-## `03_doe/output/.gitkeep`
-
-### 역할
-DOE 결과 폴더를 Git에 유지한다.
-
-### 나중에 들어갈 파일
-- Case별 log
-- Case별 metric CSV
-- 수렴 실패 기록
-- Batch 실행 요약
-
----
-
-# 6. `04_circuit`
-
-공정 및 소자 변화가 3-stage ring oscillator의 Power와 Delay에 미치는 영향을 검증한다.
-
-## `04_circuit/inverter/inverter.cmd.template`
-
-### 역할
-NMOS와 PMOS를 CMOS unit inverter로 연결하는 sanity-check용 MixedMode 또는 회로 Deck 초안이다.
-
-### 회로 연결
-- PMOS Source → VDD
-- NMOS Source → GND
-- PMOS/NMOS Gate → IN
-- PMOS/NMOS Drain → OUT
-
-### 구조 방향
-NMOS와 PMOS 모두 긴 Drain-side composite spacer가 출력 노드 `OUT` 방향을 향해야 한다.
-
-### 계산할 항목
-- VTC
-- Switching threshold
-- NMH
-- NML
-- transient switching 정상 동작
-
-### 언제 수정하는가
-Baseline과 Proposed NMOS/PMOS가 모두 수렴한 뒤, 3-stage ring oscillator 구성 전에 수정한다.
-
----
-
-## `04_circuit/ring_oscillator/ring_oscillator.cmd.template`
-
-### 역할
-3-stage ring oscillator를 구성하는 primary circuit validation Deck 초안이다.
-
-### 계산할 항목
-- Oscillation frequency
-- Stage delay
-- Average power
-- Energy per cycle
+- oscillation frequency
+- stage delay
+- average power
+- energy per cycle
 - PDP 또는 EDP
 
-### 프로젝트 내 역할
-- 공정 변화가 실제 반복 스위칭 성능에 미치는 영향 확인
-- 회로 성능 중심 Pareto 후보 선정에 사용할 primary metric 제공
-- 필요하면 Virtual R2R의 circuit sentinel로 확장 가능
+주의:
 
-### 언제 수정하는가
-Unit inverter가 정상 동작한 뒤 확장한다.
+- Proposed device의 drain-side composite spacer가 각 stage의 switching output node를 향하도록 배치한다.
 
 ---
 
-## `04_circuit/output/.gitkeep`
+## 5. 결과 분석 폴더
 
-### 역할
-회로 결과 폴더를 Git에 유지한다.
+### `05_results/pareto.py`
 
-### 나중에 들어갈 파일
-- VTC CSV
-- Transient waveform
-- Delay summary
-- Power summary
-- Ring oscillator waveform
-- 회로 log
+Pareto front를 계산한다.
 
----
-
-# 7. `05_results`
-
-공정, 소자, 회로 결과를 한 곳에 모으고 최종 분석을 수행한다.
-
-## `05_results/pareto.py`
-
-### 역할
-여러 목적함수에 대해 Pareto front를 계산한다.
-
-### 입력
-Case별 metric이 포함된 CSV.
-
-### 실행 예시
+Device screening 예시:
 
 ```bash
-python 05_results/pareto.py \
-  --input 05_results/summary/all_metrics.csv \
-  --objectives ioff_A cgd_F edp_Js
+python3 05_results/pareto.py \
+  --input 05_results/summary/all_results.csv \
+  --maximize ion_A \
+  --minimize ioff_A dibl_mV_V cgd_F \
+  --output 05_results/summary/device_screening_pareto.csv
 ```
 
-### 출력
+Circuit-level DTCO 예시:
 
-```text
-05_results/summary/pareto.csv
+```bash
+python3 05_results/pareto.py \
+  --input 05_results/summary/all_results.csv \
+  --maximize oscillation_frequency_Hz \
+  --minimize stage_delay_s average_power_W energy_per_cycle_J edp_Js \
+  --output 05_results/summary/circuit_dtco_pareto.csv
 ```
 
-### 계산 의미
-다른 후보보다 모든 목적함수에서 동시에 나쁜 조건을 제거하고 비지배해만 남긴다.
+특징:
 
-### 주의
-- `Ion`처럼 최대화할 값은 부호를 바꾸거나 constraint로 처리해야 한다.
-- NaN이 있는 case는 원인을 별도로 기록해야 한다.
-- Pareto 결과만으로 최종 구조를 선택하지 않고 재검증해야 한다.
+- `Ion`, `oscillation_frequency_Hz`처럼 클수록 좋은 지표와 `Cgd`, `stage_delay_s`, `EDP`처럼 작을수록 좋은 지표를 함께 처리한다.
+- 소자 지표 Pareto는 screening용이고, 최종 DTCO Pareto는 회로 지표 기준으로 계산한다.
+- 기존 `--objectives` 인자는 backward-compatible minimization 용도로만 남긴다.
 
----
+### `05_results/robust_optimum.py`
 
-## `05_results/raw/.gitkeep`
+공정 편차 case 결과를 요약하고 robust optimum을 고른다.
 
-### 역할
-원본 결과 폴더를 유지한다.
+입력:
 
-### 나중에 들어갈 파일
-- TCAD에서 직접 추출한 CSV
-- Circuit raw CSV
-- Case별 metric 원본
-- 원본 값 변환 전 데이터
+- robust result CSV
+- 선택적으로 baseline reference CSV
 
-### 원칙
-Raw 파일의 값을 수동으로 수정하지 않는다.
+출력:
 
----
-
-## `05_results/summary/.gitkeep`
-
-### 역할
-요약 결과 폴더를 유지한다.
-
-### 나중에 들어갈 대표 파일
-
-#### `all_metrics.csv`
-한 행이 한 DOE case인 통합 데이터.
-
-예상 열:
-- Case ID
-- L_sp_S
-- L_sp_D
-- W_low_k
-- Ion
-- Ioff
-- SS
-- DIBL
-- Cgd
-- Delay
-- Power
-- EDP
-- Status
-
-#### `pareto.csv`
-Pareto front에 포함된 후보.
-
-#### `validated_candidates.csv`
-직접 재시뮬레이션으로 검증된 후보.
-
----
-
-## `05_results/figures/.gitkeep`
-
-### 역할
-최종 Figure 폴더를 유지한다.
-
-### 나중에 들어갈 그림
-- Baseline vs Proposed 3D 구조
-- Id–Vg
-- Ion/Ioff
-- SS
-- DIBL
-- Electric field
-- Cgd heatmap
-- Unit inverter VTC
-- 3-stage ring oscillator waveform
-- RO3 Delay–Power
-- Pareto front
-- Robust optimum
-
-### 원칙
-Figure 파일명에 내용이 드러나도록 이름을 붙인다.
-
-예:
-
-```text
-fig01_structure_comparison.png
-fig02_idvg_nmos.png
-fig03_pareto_edp_ioff.png
-cgd_heatmap.png
-pareto_front.png
-robust_defense_compensation.png
-```
-
----
-
-## `05_results/plot_figures.py`
-
-### 역할
-결과 CSV를 읽어서 heatmap, trade-off graph, Pareto front, robust 방어/보상 그래프를 생성한다.
-
-### 기본 입력
-- `05_results/summary/all_metrics.csv`
-- `05_results/summary/pareto.csv`
 - `05_results/summary/robust_optimum.csv`
 
-### 생성 위치
+계산 항목:
+
+- Ion 유지율
+- EDP 열화율
+- Cgd 개선 유지율
+- Cgd 개선 대비 Ion 손실 보상율
+- Stage delay, average power, energy per cycle 기준 회로 DTCO 열화율
+- guardrail 통과 여부
+- robust score
+
+### `05_results/plot_figures.py`
+
+최종 figure 생성을 담당한다.
+
+목표 figure:
+
+- Id-Vg 및 핵심 지표
+- Cgd/전계 heatmap
+- Device screening Pareto front
+- Circuit-level DTCO Pareto front
+- Active DOE 전후 비교
+- Robust optimum summary
+
+### `05_results/raw/`
+
+TCAD raw output의 로컬 보관 위치다.
+
+주의:
+
+- 대용량 raw 파일은 Git에 올리지 않는다.
+- 필요한 요약 CSV와 핵심 figure만 Git에 반영한다.
+
+### `05_results/summary/`
+
+분석용 요약 CSV를 둔다.
+
+예상 파일:
+
+- `all_results.csv`
+- `device_screening_pareto.csv`
+- `circuit_dtco_pareto.csv`
+- `robust_results.csv`
+- `robust_optimum.csv`
+
+### `05_results/figures/`
+
+보고서, 포스터, 발표자료에 들어갈 최종 그림을 둔다.
+
+---
+
+## 6. 제출 폴더
+
+### `06_submission/report/`
+
+보고서 파일을 둔다.
+
+### `06_submission/poster/`
+
+포스터 파일을 둔다.
+
+### `06_submission/presentation/`
+
+발표자료 파일을 둔다.
+
+---
+
+## 7. 권장 작업 순서
 
 ```text
-05_results/figures/
-```
-
-### 실행 예시
-
-```bash
-python 05_results/plot_figures.py
-```
-
-특정 metric만 heatmap으로 그리려면:
-
-```bash
-python 05_results/plot_figures.py \
-  --heatmap-metrics cgd_F edp_Js ion_A
+1. 원본 3D FinFET example 확보
+2. baseline 구조 재현
+3. proposed 구조 구현
+4. initial DOE 48개 + anchor case 생성
+5. TCAD 실행 및 all_results.csv 정리
+6. Device screening Pareto 계산
+7. device active DOE 후보 추천 및 실행
+8. 회로 검증 후 circuit-level DTCO Pareto 계산
+9. grid-snapped local refinement 실행
+10. robust validation 실행
+11. 최종 그림과 제출물 작성
 ```
 
 ---
 
-# 8. `06_submission`
-
-대회에 실제 제출하는 최종 산출물을 관리한다.
-
-## `06_submission/report/.gitkeep`
-
-### 역할
-보고서 폴더를 유지한다.
-
-### 나중에 들어갈 파일
-- 보고서 원본
-- 제출 PDF
-- 표와 부록
-
-예:
+## 8. 결과 CSV 권장 스키마
 
 ```text
-final_report.docx
-final_report.pdf
+case_id, case_group, structure,
+l_sp_s_nm, l_sp_d_nm, w_low_k_nm,
+grid_snapped, grid_step_nm,
+ion_A, ioff_A, vth_V, ss_mV_dec, dibl_mV_V,
+cgd_F, cgs_F, cgg_F,
+ro_freq_Hz, stage_delay_s, avg_power_W, energy_J, edp_Js,
+status, note
 ```
 
----
-
-## `06_submission/poster/.gitkeep`
-
-### 역할
-포스터 폴더를 유지한다.
-
-### 나중에 들어갈 파일
-- 포스터 편집본
-- 인쇄용 PDF
-- 최종 이미지
-
-예:
+Robust 결과 CSV 권장 스키마:
 
 ```text
-final_poster.pptx
-final_poster.pdf
+robust_case_id, base_case_id, variation_kind, delta_nm,
+l_sp_s_nm, l_sp_d_nm, w_low_k_nm,
+ion_A, cgd_F, edp_Js,
+status, note
 ```
-
----
-
-## `06_submission/presentation/.gitkeep`
-
-### 역할
-발표자료 폴더를 유지한다.
-
-### 나중에 들어갈 파일
-- 발표 슬라이드
-- 발표 PDF
-- 발표 대본
-
-예:
-
-```text
-final_presentation.pptx
-presentation_script.md
-```
-
----
-
-# 9. `.gitkeep` 파일 공통 설명
-
-현재 프로젝트에는 다음 `.gitkeep` 파일이 있다.
-
-```text
-00_original_example/.gitkeep
-01_baseline/output/.gitkeep
-02_proposed/output/.gitkeep
-03_doe/cases/.gitkeep
-03_doe/output/.gitkeep
-04_circuit/output/.gitkeep
-05_results/raw/.gitkeep
-05_results/summary/.gitkeep
-05_results/figures/.gitkeep
-06_submission/report/.gitkeep
-06_submission/poster/.gitkeep
-06_submission/presentation/.gitkeep
-```
-
-Git은 빈 폴더를 추적하지 않기 때문에 빈 파일인 `.gitkeep`을 넣어 폴더를 유지한다.
-
-실제 파일이 들어온 뒤에도 남겨둬도 문제없지만, 필요하면 삭제할 수 있다.
-
----
-
-# 10. 현재 파일 분류
-
-## 사람이 직접 관리하는 파일
-
-```text
-README.md
-TODO.md
-FILE_GUIDE.md
-project.yaml
-requirements.txt
-.gitignore
-```
-
-## 실행 또는 분석 코드
-
-```text
-check_project.py
-install_here.sh
-03_doe/generate_cases.py
-05_results/pareto.py
-```
-
-## TCAD/회로 입력 초안
-
-```text
-01_baseline/process/baseline_sprocess.cmd.template
-01_baseline/device/baseline_nmos_sdevice.cmd.template
-01_baseline/device/baseline_pmos_sdevice.cmd.template
-02_proposed/process/proposed_sprocess.cmd.template
-02_proposed/device/proposed_nmos_sdevice.cmd.template
-02_proposed/device/proposed_pmos_sdevice.cmd.template
-03_doe/template/master_case.cmd.template
-04_circuit/inverter/inverter.cmd.template
-04_circuit/ring_oscillator/ring_oscillator.cmd.template
-```
-
-## 폴더 유지용 파일
-
-모든 `.gitkeep`
-
-## 자동 참고 파일
-
-```text
-TREE.txt
-```
-
----
-
-# 11. 파일 수정 우선순위
-
-프로젝트 초반에는 아래 파일만 우선 수정한다.
-
-1. `project.yaml`
-2. `01_baseline/process/baseline_sprocess.cmd.template`
-3. `01_baseline/device/baseline_nmos_sdevice.cmd.template`
-4. `01_baseline/device/baseline_pmos_sdevice.cmd.template`
-5. `TODO.md`
-
-Baseline이 완성된 다음에 수정한다.
-
-6. `02_proposed/process/proposed_sprocess.cmd.template`
-7. `02_proposed/device/proposed_nmos_sdevice.cmd.template`
-8. `02_proposed/device/proposed_pmos_sdevice.cmd.template`
-
-Proposed 단일 조건이 수렴한 다음에 수정한다.
-
-9. `03_doe/template/master_case.cmd.template`
-10. `03_doe/generate_cases.py`
-11. `04_circuit/inverter/inverter.cmd.template`
-12. `04_circuit/ring_oscillator/ring_oscillator.cmd.template`
-13. `05_results/pareto.py`
-
----
-
-# 12. 새 파일 추가 규칙
-
-새 파일을 추가할 때는 다음 중 하나에 해당해야 한다.
-
-- TCAD 입력 Deck
-- 실행 script
-- Metric 추출 script
-- Raw 결과
-- Summary 결과
-- Figure
-- 최종 제출물
-
-불필요한 계획 문서나 역할별 메모 파일은 만들지 않는다.
-
-새 파일을 추가하면 이 `FILE_GUIDE.md`에도 다음 내용을 추가한다.
-
-- 파일 경로
-- 역할
-- 입력
-- 출력
-- 수정 시점
-- 주의사항

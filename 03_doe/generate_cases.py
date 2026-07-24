@@ -11,14 +11,20 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--samples", type=int, default=24)
-    parser.add_argument("--method", choices=["lhs", "sobol"], default="lhs")
-    parser.add_argument("--seed", type=int, default=20260723)
-    args = parser.parse_args()
-
     with (ROOT / "project.yaml").open(encoding="utf-8") as f:
         cfg = yaml.safe_load(f)
+
+    doe_cfg = cfg.get("doe", {})
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--samples", type=int, default=doe_cfg.get("initial_samples", 48))
+    parser.add_argument("--method", choices=["lhs", "sobol"], default=doe_cfg.get("method", "lhs"))
+    parser.add_argument("--seed", type=int, default=doe_cfg.get("seed", 20260723))
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=ROOT / doe_cfg.get("output", "03_doe/cases/initial_doe_cases.csv"),
+    )
+    args = parser.parse_args()
 
     space = cfg["design_space"]
     names = ["l_sp_s_nm", "l_sp_d_nm", "w_low_k_nm"]
@@ -49,11 +55,14 @@ def main() -> None:
 
     df = pd.DataFrame(accepted, columns=names)
     df.insert(0, "case_id", [f"C{i:03d}" for i in range(1, len(df) + 1)])
+    df.insert(1, "case_group", "initial_doe")
+    df.insert(2, "structure", "proposed")
+    df["grid_snapped"] = False
     df["status"] = "not_started"
 
-    output = ROOT / "03_doe" / "cases.csv"
-    df.to_csv(output, index=False)
-    print(f"saved: {output} ({len(df)} cases)")
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(args.output, index=False)
+    print(f"saved: {args.output} ({len(df)} cases)")
 
 
 if __name__ == "__main__":

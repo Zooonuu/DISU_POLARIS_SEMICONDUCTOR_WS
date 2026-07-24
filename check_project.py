@@ -6,6 +6,7 @@ ROOT = Path(__file__).resolve().parent
 required = [
     "README.md",
     "TODO.md",
+    "FILE_GUIDE.md",
     "project.yaml",
     "00_original_example",
     "01_baseline/process",
@@ -13,8 +14,15 @@ required = [
     "02_proposed/process",
     "02_proposed/device",
     "03_doe",
+    "03_doe/generate_cases.py",
+    "03_doe/generate_anchor_cases.py",
+    "03_doe/suggest_active_cases.py",
+    "03_doe/generate_local_refinement_cases.py",
+    "03_doe/generate_robust_cases.py",
     "04_circuit",
     "05_results",
+    "05_results/pareto.py",
+    "05_results/robust_optimum.py",
     "06_submission",
 ]
 
@@ -32,4 +40,4 @@ if missing:
         print(" -", item)
     sys.exit(1)
 
-print("[OK] 간소화 프로젝트 구조가 정상입니다.")
+print("[OK] 프로젝트 구조가 정상입니다.")
